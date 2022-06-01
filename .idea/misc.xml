@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/empty_background.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_bookmarks_white.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_circle.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_home.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_money.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_user.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/rounded_black.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/selector.xml" value="0.2109375" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/text_input_box_stroke.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_goals.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_home.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_login.xml" value="0.34010416666666665" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_main.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_profile.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_register.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/bottom_nav.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/menu.xml" value="0.3541666666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
