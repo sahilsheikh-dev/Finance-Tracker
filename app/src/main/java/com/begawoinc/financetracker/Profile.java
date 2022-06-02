@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -15,6 +18,7 @@ public class Profile extends AppCompatActivity {
 
     public static String USERNAME;
     BottomNavigationView bottomNavigationView;
+    Button logoutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,7 @@ public class Profile extends AppCompatActivity {
         USERNAME = sharedPreferences.getString("USERNAME", "");
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
+        logoutBtn = findViewById(R.id.logoutBtn);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -56,6 +61,17 @@ public class Profile extends AppCompatActivity {
 
 //            write code here
 
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+                sharedPreferences.edit().remove("USERNAME").commit();
+
+                Intent intent = new Intent(Profile.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
 

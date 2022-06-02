@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,6 +30,7 @@ public class Login extends AppCompatActivity {
 
     Button registerBtn, forgetBtn, loginBtn;
     TextInputLayout emailIn, passwordIn;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +45,13 @@ public class Login extends AppCompatActivity {
         emailIn = findViewById(R.id.email);
         passwordIn = findViewById(R.id.password);
         forgetBtn = findViewById(R.id.forgotBtn);
+        progressBar = findViewById(R.id.progressBar);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = String.valueOf(emailIn.getEditText().getText());
-                String password = String.valueOf(passwordIn.getEditText().getText());
+                String email = String.valueOf(emailIn.getEditText().getText()).trim();
+                String password = String.valueOf(passwordIn.getEditText().getText()).trim();
 
                 if (checkEmail(email) && !checkPasswordLength(password)){
                     emailIn.setError(null);
@@ -66,7 +69,7 @@ public class Login extends AppCompatActivity {
                     passwordIn.setError(null);
                     emailIn.setError("Please enter Email");
                 } else {
-                    email = filteredEmail(email);
+                    email = filteredEmail(email).trim();
                     login(email, password);
                 }
 
@@ -106,6 +109,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(String email, String password){
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(email);
 
@@ -119,22 +123,27 @@ public class Login extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("USERNAME", email);
                         editor.commit();
-
+                        progressBar.setVisibility(View.GONE);
                         Intent intent = new Intent(Login.this, MainActivity.class);
                         intent.putExtra("USERNAME", email);
                         startActivity(intent);
                         finish();
                     } else {
+                        progressBar.setVisibility(View.GONE);
+                        emailIn.setError(null);
                         passwordIn.setError("Wrong Password");
                         passwordIn.requestFocus();
                     }
                 } else {
+                    progressBar.setVisibility(View.GONE);
+                    passwordIn.setError(null);
                     emailIn.setError("Wrong Email");
                     emailIn.requestFocus();
                 }
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(Login.this, "Something went wrong:"+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
