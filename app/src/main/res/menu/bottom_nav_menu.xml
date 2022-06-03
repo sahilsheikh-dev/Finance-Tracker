@@ -4,6 +4,9 @@
     <item android:title="Home"
         android:icon="@drawable/ic_home"
         android:id="@+id/home"/>
+    <item android:title="Monthly Expenses"
+        android:icon="@drawable/ic_calendar"
+        android:id="@+id/expenses"/>
     <item android:title="Financial Goals"
         android:icon="@drawable/ic_bookmarks_white"
         android:id="@+id/goals"/>

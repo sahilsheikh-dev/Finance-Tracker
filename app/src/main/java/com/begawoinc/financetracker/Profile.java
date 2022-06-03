@@ -25,6 +25,8 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        getSupportActionBar().hide();
+
         SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 //        USERNAME = getIntent().getExtras().getString("USERNAME");
         USERNAME = sharedPreferences.getString("USERNAME", "");
@@ -36,18 +38,26 @@ public class Profile extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.goals:
-                        Intent intentHistory = new Intent(Profile.this, Goals.class);
-                        intentHistory.putExtra("USERNAME", USERNAME);
-                        startActivity(intentHistory);
-                        overridePendingTransition(0,0);
-                        finish();
-                        return true;
-
                     case R.id.home:
                         Intent intentAbout = new Intent(Profile.this, MainActivity.class);
                         intentAbout.putExtra("USERNAME", USERNAME);
                         startActivity(intentAbout);
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
+
+                    case R.id.expenses:
+                        Intent intentExpenses = new Intent(Profile.this, Expenses.class);
+                        intentExpenses.putExtra("USERNAME", USERNAME);
+                        startActivity(intentExpenses);
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
+
+                    case R.id.goals:
+                        Intent intentHistory = new Intent(Profile.this, Goals.class);
+                        intentHistory.putExtra("USERNAME", USERNAME);
+                        startActivity(intentHistory);
                         overridePendingTransition(0,0);
                         finish();
                         return true;

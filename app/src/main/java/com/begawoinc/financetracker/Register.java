@@ -1,11 +1,14 @@
 package com.begawoinc.financetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,14 +17,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +48,8 @@ public class Register extends AppCompatActivity {
     TextView incorrectOtp;
     ProgressBar progressBar;
     LinearLayout otpSection;
+    FirebaseAuth mAuth;
+    String mVerificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +74,7 @@ public class Register extends AppCompatActivity {
         otpInput6 = findViewById(R.id.otpInput6);
         incorrectOtp = findViewById(R.id.incorrectOtp);
         verifyOtpBtn = findViewById(R.id.verifyOtpBtn);
+        mAuth = FirebaseAuth.getInstance();
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,15 +142,14 @@ public class Register extends AppCompatActivity {
                                 numberIn.setError(null);
                                 passwordIn.setError(null);
 
-                                otpSection.setVisibility(View.VISIBLE);
-                                registerBtn.setVisibility(View.GONE);
-                                verifyOtpBtn.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-
+//                                to disable the input boxes
                                 nameIn.setEnabled(false);
                                 emailIn.setEnabled(false);
                                 numberIn.setEnabled(false);
                                 passwordIn.setEnabled(false);
+
+//                                to send otp verification code
+                                sendOtp(number.toString().trim());
 
                                 verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -150,20 +167,16 @@ public class Register extends AppCompatActivity {
                                             progressBar.setVisibility(View.VISIBLE);
                                             String otp = otpInput1In + "" + otpInput2In + "" + otpInput3In + "" +
                                                     otpInput4In + "" + otpInput5In + "" + otpInput6In;
-                                            if(verifyOtp(otp)){
-                                                incorrectOtp.setVisibility(View.GONE);
-                                                register(name, username, email, Long.parseLong(number), password);
-                                                progressBar.setVisibility(View.GONE);
-                                            } else {
-                                                progressBar.setVisibility(View.GONE);
-                                                incorrectOtp.setVisibility(View.VISIBLE);
-                                            }
+
+                                            verifyOtpAndRegister(otp, name, username, email, number, password);
+
                                         } else {
                                             incorrectOtp.setVisibility(View.VISIBLE);
                                             progressBar.setVisibility(View.GONE);
                                         }
                                     }
                                 });
+                                numberOtpMove();
                             }
                         }
                         @Override
@@ -216,7 +229,6 @@ public class Register extends AppCompatActivity {
     }
 
     public boolean checkOTPInput(String otp){
-//        if (otp == 0 || otp < 999999999) return false;
         if (otp.isEmpty() || otp.length() != 1) return false;
         else return true;
     }
@@ -278,8 +290,17 @@ public class Register extends AppCompatActivity {
         myRef.child("planOfAction").child("recNetIncome").setValue(0);
         myRef.child("planOfAction").child("saving").setValue(0);
 
+//        monthlyExpenses
+        Date date = new Date();
+        int month = date.getMonth()+1;
+        int year = date.getYear()+1900;
+
+        myRef.child("monthlyExpenses").child(month + "-" + year).child("expense").setValue("Food");
+        myRef.child("monthlyExpenses").child(month + "-" + year).child("amtNeed").setValue(10000);
+        myRef.child("monthlyExpenses").child(month + "-" + year).child("date").setValue(month+"-"+1+"-"+year);
+
         progressBar.setVisibility(View.GONE);
-        Toast.makeText(Register.this, "Registered Successful, Please Login to Continue", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Register.this, "OTP Verified, Please Login to Continue", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(Register.this, Login.class);
         startActivity(intent);
@@ -287,9 +308,217 @@ public class Register extends AppCompatActivity {
 
     }
 
-    public boolean verifyOtp(String otp){
-        if (otp.equals("123456")) return true;
-        else return false;
+    public void numberOtpMove(){
+
+        otpInput1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().trim().isEmpty()){
+                    otpInput2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        otpInput2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().trim().isEmpty()){
+                    otpInput3.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    otpInput1.requestFocus();
+                }
+            }
+        });
+
+        otpInput3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().trim().isEmpty()){
+                    otpInput4.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    otpInput2.requestFocus();
+                }
+            }
+        });
+
+        otpInput4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().trim().isEmpty()){
+                    otpInput5.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    otpInput3.requestFocus();
+                }
+            }
+        });
+
+        otpInput5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().trim().isEmpty()){
+                    otpInput6.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    otpInput4.requestFocus();
+                }
+            }
+        });
+
+        otpInput6.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    otpInput5.requestFocus();
+                }
+            }
+        });
+
+    }
+
+    public void sendOtp(String phoneNumber) {
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber("+91" + phoneNumber)       // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // Activity (for callback binding)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        @Override
+        public void onVerificationCompleted(PhoneAuthCredential credential) {
+            final String code = credential.getSmsCode();
+            if (code != null){
+//                verifyOtp(code);
+            }
+        }
+
+        @Override
+        public void onVerificationFailed(FirebaseException e) {
+//            to enable the input boxes
+            nameIn.setEnabled(true);
+            emailIn.setEnabled(true);
+            numberIn.setEnabled(true);
+            passwordIn.setEnabled(true);
+
+            otpSection.setVisibility(View.GONE);
+            registerBtn.setVisibility(View.VISIBLE);
+            verifyOtpBtn.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(Register.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+            super.onCodeSent(verificationId, token);
+            mVerificationId = verificationId;
+            otpSection.setVisibility(View.VISIBLE);
+            registerBtn.setVisibility(View.GONE);
+            verifyOtpBtn.setVisibility(View.VISIBLE);
+            incorrectOtp.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(Register.this, "OTP has been sent, please enter to verify", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    public void verifyOtpAndRegister(String otp, String name, String username, String email, String number, String password){
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, otp.toString().trim());
+        signinByCredentials(credential, name, username, email, number, password);
+    }
+
+    public void signinByCredentials(PhoneAuthCredential credential, String name, String username, String email, String number, String password){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            otpSection.setVisibility(View.VISIBLE);
+                            registerBtn.setVisibility(View.GONE);
+                            verifyOtpBtn.setVisibility(View.VISIBLE);
+                            incorrectOtp.setVisibility(View.GONE);
+                            register(name, username, email, Long.parseLong(number), password);
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            otpSection.setVisibility(View.VISIBLE);
+                            registerBtn.setVisibility(View.GONE);
+                            verifyOtpBtn.setVisibility(View.VISIBLE);
+                            incorrectOtp.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        otpSection.setVisibility(View.VISIBLE);
+                        registerBtn.setVisibility(View.GONE);
+                        verifyOtpBtn.setVisibility(View.VISIBLE);
+                        incorrectOtp.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
 }

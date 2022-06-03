@@ -8,10 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class Expenses extends AppCompatActivity {
 
     public static String USERNAME;
     BottomNavigationView bottomNavigationView;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_expenses);
 
         getSupportActionBar().hide();
 
@@ -27,44 +28,44 @@ public class MainActivity extends AppCompatActivity {
         boolean isUsernameEmpty = sharedPreferences.getString("USERNAME", "").isEmpty();
 
         if (isUsernameEmpty){
-            Intent intent = new Intent(MainActivity.this, Login.class );
+            Intent intent = new Intent(Expenses.this, Login.class );
             startActivity(intent);
             finish();
         } else {
             //            USERNAME = getIntent().getExtras().getString("USERNAME");
             USERNAME = sharedPreferences.getString("USERNAME", "");
             bottomNavigationView = findViewById(R.id.bottom_navigator);
-            bottomNavigationView.setSelectedItemId(R.id.home);
+            bottomNavigationView.setSelectedItemId(R.id.expenses);
 
             bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()){
-                        case R.id.expenses:
-                            Intent intentExpenses = new Intent(MainActivity.this, Expenses.class);
+                    switch (item.getItemId()) {
+                        case R.id.home:
+                            Intent intentExpenses = new Intent(Expenses.this, MainActivity.class);
                             intentExpenses.putExtra("USERNAME", USERNAME);
                             startActivity(intentExpenses);
-                            overridePendingTransition(0,0);
+                            overridePendingTransition(0, 0);
                             finish();
                             return true;
 
                         case R.id.goals:
-                            Intent intentHistory = new Intent(MainActivity.this, Goals.class);
+                            Intent intentHistory = new Intent(Expenses.this, Goals.class);
                             intentHistory.putExtra("USERNAME", USERNAME);
                             startActivity(intentHistory);
-                            overridePendingTransition(0,0);
+                            overridePendingTransition(0, 0);
                             finish();
                             return true;
 
                         case R.id.profile:
-                            Intent intentAbout = new Intent(MainActivity.this, Profile.class);
+                            Intent intentAbout = new Intent(Expenses.this, Profile.class);
                             intentAbout.putExtra("USERNAME", USERNAME);
                             startActivity(intentAbout);
-                            overridePendingTransition(0,0);
+                            overridePendingTransition(0, 0);
                             finish();
                             return true;
 
-                        case R.id.home:
+                        case R.id.expenses:
                             return true;
                     }
                     return false;
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
 //            write code here
-
 
         }
 

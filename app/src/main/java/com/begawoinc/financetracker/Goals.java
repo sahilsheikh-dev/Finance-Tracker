@@ -21,6 +21,7 @@ public class Goals extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals);
 
+        getSupportActionBar().hide();
 
         SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 //        USERNAME = getIntent().getExtras().getString("USERNAME");
@@ -36,6 +37,14 @@ public class Goals extends AppCompatActivity {
                         Intent intentAbout = new Intent(Goals.this, MainActivity.class);
                         intentAbout.putExtra("USERNAME", USERNAME);
                         startActivity(intentAbout);
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
+
+                    case R.id.expenses:
+                        Intent intentExpenses = new Intent(Goals.this, Expenses.class);
+                        intentExpenses.putExtra("USERNAME", USERNAME);
+                        startActivity(intentExpenses);
                         overridePendingTransition(0,0);
                         finish();
                         return true;
