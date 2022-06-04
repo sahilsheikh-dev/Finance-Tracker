@@ -4,4 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#4285F4</color>
+    <color name="light_gray">#ECECEC</color>
+    <color name="bg_gray">#262626</color>
+    <color name="bottom_nav_primary">#7B1FA2</color>
 </resources>

@@ -265,10 +265,15 @@ public class Register extends AppCompatActivity {
         myRef.child("authUser").child("password").setValue(password);
 
 //        financialGoals
-        myRef.child("financialGoals").child("1").child("amtNeed").setValue(0);
+        Date date = new Date();
+        int day = date.getDate()+1;
+        int month = date.getMonth()+1;
+        int year = date.getYear()+1900;
+        
+        myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
+        myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
         myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
-        myRef.child("financialGoals").child("1").child("isCompleted").setValue(0);
-        myRef.child("financialGoals").child("1").child("year").setValue(1999);
+        myRef.child("financialGoals").child("1").child("goalDate").setValue(month+"-"+date+"-"+year);
 
 //        net worth - assets
         myRef.child("networth").child("assets").child("cash").setValue(0);
@@ -291,13 +296,9 @@ public class Register extends AppCompatActivity {
         myRef.child("planOfAction").child("saving").setValue(0);
 
 //        monthlyExpenses
-        Date date = new Date();
-        int month = date.getMonth()+1;
-        int year = date.getYear()+1900;
-
         myRef.child("monthlyExpenses").child(month + "-" + year).child("expense").setValue("Food");
         myRef.child("monthlyExpenses").child(month + "-" + year).child("amtNeed").setValue(10000);
-        myRef.child("monthlyExpenses").child(month + "-" + year).child("date").setValue(month+"-"+1+"-"+year);
+        myRef.child("monthlyExpenses").child(month + "-" + year).child("date").setValue(month+"-"+date+"-"+year);
 
         progressBar.setVisibility(View.GONE);
         Toast.makeText(Register.this, "OTP Verified, Please Login to Continue", Toast.LENGTH_SHORT).show();

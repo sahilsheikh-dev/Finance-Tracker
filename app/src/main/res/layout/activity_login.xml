@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/black"
     tools:context=".Login"
     android:padding="20dp">
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
         android:text="Hello There, Welcome Back"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="40sp" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/antic"
         android:text="Sign In to Continue"
-        android:textColor="@color/gray"
+        android:textColor="@color/light_gray"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="@color/white"
             android:textColorHint="@color/gray"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,6 +62,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/white"
             android:visibility="gone"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="@color/white"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/gray"
             android:textColorHint="@color/gray"
@@ -79,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +90,7 @@
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:text="Forget Password"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:layout_gravity="right"
             android:textAlignment="textEnd"
             android:elevation="0dp"
@@ -103,8 +104,8 @@
             android:layout_height="wrap_content"
             android:text="Login"
             android:textStyle="bold"
-            android:background="@drawable/rounded_black"
-            android:textColor="#ffffff"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"/>
 
@@ -114,8 +115,9 @@
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:text="New User? Sign In"
+            android:textStyle="bold"
             android:fontFamily="@font/antic"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:elevation="0dp"

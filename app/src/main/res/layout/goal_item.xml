@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/data_border"
+    android:padding="10sp"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/goalName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goal-1"
+        android:textSize="19dp"
+        android:letterSpacing="0.05"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/goalDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="July 1st 2022"
+        android:textSize="14dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/goalName"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/rupeeHave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₹"
+        android:textSize="17dp"
+        android:textColor="#388E3C"
+        android:textStyle="bold"
+        app:layout_constraintRight_toLeftOf="@id/amtHaving"
+        app:layout_constraintTop_toTopOf="@id/goalDate"/>
+
+    <TextView
+        android:id="@+id/amtHaving"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="200"
+        android:textSize="17dp"
+        android:textColor="#388E3C"
+        android:textStyle="bold"
+        app:layout_constraintRight_toLeftOf="@id/slash"
+        app:layout_constraintTop_toTopOf="@id/goalDate"/>
+
+    <TextView
+        android:id="@+id/slash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" / "
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/rupeeNeed"
+        app:layout_constraintBottom_toBottomOf="@id/rupeeNeed"
+        app:layout_constraintRight_toLeftOf="@id/rupeeNeed"/>
+
+    <TextView
+        android:id="@+id/rupeeNeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₹"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/amtNeed"
+        app:layout_constraintBottom_toBottomOf="@id/amtNeed"
+        app:layout_constraintRight_toLeftOf="@id/amtNeed"/>
+
+    <TextView
+        android:id="@+id/amtNeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50,000"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginEnd="10sp"
+        app:layout_constraintTop_toTopOf="@id/amtHaving"
+        app:layout_constraintBottom_toBottomOf="@id/amtHaving"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:background="#000000"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/amtNeed" />-->
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/amtProgressBar"-->
+<!--        style="?android:attr/progressBarStyleHorizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:indeterminate="true"-->
+<!--        android:indeterminateTintMode="src_atop"-->
+<!--        android:indeterminateTint="@color/black"-->
+<!--        android:layout_marginTop="10sp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/goalDate"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"/>-->
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
