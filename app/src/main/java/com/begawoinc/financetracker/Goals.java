@@ -47,8 +47,10 @@ public class Goals extends AppCompatActivity {
     List<FinancialGoals> goalsList;
     FirebaseAuth mAuth;
     final Context context = this;
-    String amtHaving;
-    int count;
+    String amtHaving, goalDate;
+    double totalAmtNeededSt, totalAmtHavingSt;
+    long count;
+    TextView totalAmtHaving, totalAmtNeeded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class Goals extends AppCompatActivity {
         addGoals = findViewById(R.id.addGoals);
         mAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
+        totalAmtHaving = findViewById(R.id.totalAmtHaving);
+        totalAmtNeeded = findViewById(R.id.totalAmtNeeded);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -112,13 +116,16 @@ public class Goals extends AppCompatActivity {
         financialGoalsRecyclerAdapter = new FinancialGoalsRecyclerAdapter(goalsList);
         recyclerView.setAdapter(financialGoalsRecyclerAdapter);
 
+//        to get all the data of financial goals
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.VISIBLE);
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    FinancialGoals goal = dataSnapshot.getValue(FinancialGoals.class);
-                    goalsList.add(goal);
+                    if (!dataSnapshot.getKey().equals("financialGoalMaxCount")){
+                        FinancialGoals goal = dataSnapshot.getValue(FinancialGoals.class);
+                        goalsList.add(goal);
+                    }
                 }
                 financialGoalsRecyclerAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
@@ -131,8 +138,89 @@ public class Goals extends AppCompatActivity {
             }
         });
 
+//        recycler view
         recyclerView.setAdapter(financialGoalsRecyclerAdapter);
 
+//        to count total need of money
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+                long i = (long) snapshot.child("financialGoalMaxCount").getValue();
+                while (snapshot.exists() && i != 0){
+                    System.out.println("COUNT::"+i+"/4");
+                    myRef.child(String.valueOf(i)).child("amtNeed").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                totalAmtNeededSt = totalAmtNeededSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
+                                if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 100000){
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", totalAmtNeededSt).toString().trim()+"/-");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 100000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 10000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/100000;
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 10000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/10000000;
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(Goals.this, "ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    i--;
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(Goals.this, "ERROR::"+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        to count total have of money
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+                long i = (long) snapshot.child("financialGoalMaxCount").getValue();
+                while (snapshot.exists() && i != 0){
+                    myRef.child(String.valueOf(i)).child("amtHaving").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                totalAmtHavingSt = totalAmtHavingSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
+                                if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 100000){
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", totalAmtHavingSt).toString().trim()+"/-");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 100000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 10000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/100000;
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 10000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/10000000;
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(Goals.this, "ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    i--;
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(Goals.this, "ERROR::"+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        onClick listner for add goals button
         addGoals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,10 +230,14 @@ public class Goals extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setView(goalView);
 
+                TextView goalHeading = goalView.findViewById(R.id.goalHeading);
                 Button saveGoalBtn = goalView.findViewById(R.id.saveGoalBtn);
                 Button closeBtn = goalView.findViewById(R.id.closeBtn);
 
+                goalHeading.setText("Save your financial goal");
+
                 AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
 
                 saveGoalBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -160,7 +252,17 @@ public class Goals extends AppCompatActivity {
                         TextInputLayout amtHavingIn = goalView.findViewById(R.id.amtHaving);
 
                         String goalName = goalNameIn.getEditText().getText().toString().trim();
-                        String goalDate = monthIn.getText().toString().trim() + "/" + dateIn.getText().toString().trim() + "/" + yearIn.getText().toString().trim();
+
+                        goalDate = "";
+
+                        if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim() + "/";
+                        else goalDate = goalDate + monthIn.getText().toString().trim() + "/";
+
+                        if (dateIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+dateIn.getText().toString().trim() + "/";
+                        else goalDate = goalDate + dateIn.getText().toString().trim() + "/";
+
+                        goalDate = goalDate + yearIn.getText().toString().trim();
+
                         String amtNeed = amtNeedIn.getEditText().getText().toString().trim();
                         amtHaving = amtHavingIn.getEditText().getText().toString().trim();
 
@@ -184,51 +286,13 @@ public class Goals extends AppCompatActivity {
                             amtHavingIn.setError(null);
                             amtNeedIn.setError("Please Enter Your Target");
                             progressBar.setVisibility(View.GONE);
-                        } else if (isEmpty(goalDate) && isEmpty(monthIn.getText().toString().trim()) && isEmpty(dateIn.getText().toString().trim()) && isEmpty(yearIn.getText().toString().trim())) {
+                        } else if (isEmpty(monthIn.getText().toString().trim()) || isEmpty(dateIn.getText().toString().trim()) || isEmpty(yearIn.getText().toString().trim())) {
                             goalNameIn.setError(null);
                             amtNeedIn.setError(null);
                             amtHavingIn.setError(null);
                             incorrectDate.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
-                        } else if (isEmpty(monthIn.getText().toString().trim()) && Integer.parseInt(monthIn.getText().toString().trim()) > 12) {
-                            goalNameIn.setError(null);
-                            amtNeedIn.setError(null);
-                            amtHavingIn.setError(null);
-                            incorrectDate.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                        } else if ((Integer.parseInt(monthIn.getText().toString().trim()) == 2 &&
-                                ((Integer.parseInt(yearIn.getText().toString().trim()) % 4 == 0 && Integer.parseInt(yearIn.getText().toString().trim()) % 100 == 0) ||
-                                        Integer.parseInt(yearIn.getText().toString().trim()) % 400 == 0)) &&
-                                (isEmpty(monthIn.getText().toString().trim()) && Integer.parseInt(dateIn.getText().toString().trim()) > 29)) {
-                            goalNameIn.setError(null);
-                            amtNeedIn.setError(null);
-                            amtHavingIn.setError(null);
-                            incorrectDate.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                        } else if ((Integer.parseInt(monthIn.getText().toString().trim()) == 2 &&
-                                !((Integer.parseInt(yearIn.getText().toString().trim()) % 4 == 0 && Integer.parseInt(yearIn.getText().toString().trim()) % 100 == 0) ||
-                                        Integer.parseInt(yearIn.getText().toString().trim()) % 400 == 0)) &&
-                                (isEmpty(monthIn.getText().toString().trim()) && Integer.parseInt(dateIn.getText().toString().trim()) > 28)) {
-                            goalNameIn.setError(null);
-                            amtNeedIn.setError(null);
-                            amtHavingIn.setError(null);
-                            incorrectDate.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                        } else if ((Integer.parseInt(monthIn.getText().toString().trim()) % 2 == 0 && Integer.parseInt(monthIn.getText().toString().trim()) != 2)&&
-                                (isEmpty(monthIn.getText().toString().trim()) && Integer.parseInt(dateIn.getText().toString().trim()) > 30)) {
-                            goalNameIn.setError(null);
-                            amtNeedIn.setError(null);
-                            amtHavingIn.setError(null);
-                            incorrectDate.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                        } else if ((Integer.parseInt(monthIn.getText().toString().trim()) % 2 != 0 && Integer.parseInt(monthIn.getText().toString().trim()) != 2)&&
-                                (isEmpty(monthIn.getText().toString().trim()) && Integer.parseInt(dateIn.getText().toString().trim()) > 30)) {
-                            goalNameIn.setError(null);
-                            amtNeedIn.setError(null);
-                            amtHavingIn.setError(null);
-                            incorrectDate.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                        } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900)) {
+                        } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900) || String.valueOf(yearIn.getText()).trim().length() < 4) {
                             goalNameIn.setError(null);
                             amtNeedIn.setError(null);
                             amtHavingIn.setError(null);
@@ -249,9 +313,11 @@ public class Goals extends AppCompatActivity {
                             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    count = (int) dataSnapshot.getChildrenCount();
-                                    myRef.child(String.valueOf(count)).child("amtNeed").setValue(Double.parseDouble(amtNeed.toString()));
-                                    myRef.child(String.valueOf(count)).child("amtHaving").setValue(Double.parseDouble(amtHaving.toString()));
+                                    count = (long) dataSnapshot.child("financialGoalMaxCount").getValue()+1;
+                                    myRef.child("financialGoalMaxCount").setValue(count);
+                                    myRef.child(String.valueOf(count)).child("goalId").setValue(Integer.parseInt(String.valueOf(count)));
+                                    myRef.child(String.valueOf(count)).child("amtNeed").setValue(Double.parseDouble(amtNeed));
+                                    myRef.child(String.valueOf(count)).child("amtHaving").setValue(Double.parseDouble(amtHaving));
                                     myRef.child(String.valueOf(count)).child("goal").setValue(goalName.toString().trim());
                                     myRef.child(String.valueOf(count)).child("goalDate").setValue(goalDate.toString().trim());
 
@@ -276,7 +342,6 @@ public class Goals extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
-                alertDialog.show();
 
             }
         });
@@ -284,8 +349,7 @@ public class Goals extends AppCompatActivity {
     }
 
     public boolean isEmpty(String s){
-        if (s.isEmpty()) return true;
-        else return false;
+        return s.isEmpty();
     }
 
 }

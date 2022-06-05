@@ -265,40 +265,37 @@ public class Register extends AppCompatActivity {
         myRef.child("authUser").child("password").setValue(password);
 
 //        financialGoals
-        Date date = new Date();
-        int day = date.getDate()+1;
-        int month = date.getMonth()+1;
-        int year = date.getYear()+1900;
-        
         myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
         myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
         myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
-        myRef.child("financialGoals").child("1").child("goalDate").setValue(month+"-"+date+"-"+year);
+        myRef.child("financialGoals").child("1").child("goalId").setValue(1);
+        myRef.child("financialGoals").child("1").child("goalDate").setValue(01+"-"+01+"-"+2017);
+        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
 
 //        net worth - assets
-        myRef.child("networth").child("assets").child("cash").setValue(0);
-        myRef.child("networth").child("assets").child("digital").setValue(0);
-        myRef.child("networth").child("assets").child("realestate").setValue(0);
-        myRef.child("networth").child("assets").child("stock").setValue(0);
-        myRef.child("networth").child("assets").child("emergencyFund").setValue(0);
+        myRef.child("networth").child("assets").child("cash").setValue("0");
+        myRef.child("networth").child("assets").child("digital").setValue("0");
+        myRef.child("networth").child("assets").child("realestate").setValue("0");
+        myRef.child("networth").child("assets").child("stock").setValue("0");
+        myRef.child("networth").child("assets").child("emergencyFund").setValue("0");
 
 //        net worth - liabilities
-        myRef.child("networth").child("liabilities").child("creditloan").setValue(0);
-        myRef.child("networth").child("liabilities").child("homeloan").setValue(0);
-        myRef.child("networth").child("liabilities").child("otherloan").setValue(0);
-        myRef.child("networth").child("liabilities").child("personalloan").setValue(0);
+        myRef.child("networth").child("liabilities").child("creditloan").setValue("0");
+        myRef.child("networth").child("liabilities").child("homeloan").setValue("0");
+        myRef.child("networth").child("liabilities").child("otherloan").setValue("0");
+        myRef.child("networth").child("liabilities").child("personalloan").setValue("0");
 
 //        planOfAction
-        myRef.child("planOfAction").child("insurance").setValue(0);
-        myRef.child("planOfAction").child("investment").setValue(0);
-        myRef.child("planOfAction").child("monthlyExpenses").setValue(0);
-        myRef.child("planOfAction").child("recNetIncome").setValue(0);
-        myRef.child("planOfAction").child("saving").setValue(0);
+        myRef.child("planOfAction").child("insurance").setValue("0");
+        myRef.child("planOfAction").child("investment").setValue("0");
+        myRef.child("planOfAction").child("monthlyExpenses").setValue("0");
+        myRef.child("planOfAction").child("recNetIncome").setValue("0");
+        myRef.child("planOfAction").child("saving").setValue("0");
 
 //        monthlyExpenses
-        myRef.child("monthlyExpenses").child(month + "-" + year).child("expense").setValue("Food");
-        myRef.child("monthlyExpenses").child(month + "-" + year).child("amtNeed").setValue(10000);
-        myRef.child("monthlyExpenses").child(month + "-" + year).child("date").setValue(month+"-"+date+"-"+year);
+        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("expense").setValue("Food");
+        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("amtNeed").setValue("10000");
+        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("date").setValue(01+"-"+01+"-"+2022);
 
         progressBar.setVisibility(View.GONE);
         Toast.makeText(Register.this, "OTP Verified, Please Login to Continue", Toast.LENGTH_SHORT).show();

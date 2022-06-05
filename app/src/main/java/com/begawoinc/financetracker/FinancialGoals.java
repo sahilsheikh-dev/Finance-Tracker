@@ -2,10 +2,15 @@ package com.begawoinc.financetracker;
 
 public class FinancialGoals {
 
+    private int goalId;
     private String goal;
     private String goalDate;
     private double amtHaving;
     private double amtNeed;
+
+    public int getGoalId() { return goalId; }
+
+    public void setGoalId(int goalId) { this.goalId = goalId; }
 
     public String getGoal() {
         return goal;
@@ -38,4 +43,5 @@ public class FinancialGoals {
     public void setAmtNeed(double amtNeed) {
         this.amtNeed = amtNeed;
     }
+
 }
