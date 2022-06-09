@@ -272,7 +272,7 @@ public class Register extends AppCompatActivity {
         myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
         myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
         myRef.child("financialGoals").child("1").child("goalId").setValue(1);
-        myRef.child("financialGoals").child("1").child("goalDate").setValue(01+"-"+01+"-"+2017);
+        myRef.child("financialGoals").child("1").child("goalDate").setValue(2017+"-"+01+"-"+02);
 
 //        net worth - assets
         myRef.child("networth").child("assets").child("cash").setValue("0");
@@ -297,7 +297,7 @@ public class Register extends AppCompatActivity {
 //        monthlyExpenses
         myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("expense").setValue("Food");
         myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("amtNeed").setValue("10000");
-        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("date").setValue(01+"-"+01+"-"+2022);
+        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("date").setValue(2022+"-"+01+"-"+01);
 
         progressBar.setVisibility(View.GONE);
         Toast.makeText(Register.this, "OTP Verified, Please Login to Continue", Toast.LENGTH_SHORT).show();

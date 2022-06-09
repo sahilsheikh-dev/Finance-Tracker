@@ -34,7 +34,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
     List<FinancialGoals> goalsList;
     public static String USERNAME;
-    String amtHaving;
+    String amtHaving, goalDate;
     int id;
     long count;
 
@@ -128,9 +128,9 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                             TextInputLayout amtHavingIn = goalView.findViewById(R.id.amtHaving);
 
                             goalNameIn.getEditText().setText(goal.getGoal());
-                            monthIn.setText(goal.getGoalDate().charAt(0)+""+goal.getGoalDate().charAt(1));
-                            dateIn.setText(goal.getGoalDate().charAt(3)+""+goal.getGoalDate().charAt(4));
-                            yearIn.setText(goal.getGoalDate().charAt(6)+""+goal.getGoalDate().charAt(7)+""+goal.getGoalDate().charAt(8)+""+goal.getGoalDate().charAt(9));
+                            yearIn.setText(goal.getGoalDate().charAt(0)+""+goal.getGoalDate().charAt(1)+""+goal.getGoalDate().charAt(2)+""+goal.getGoalDate().charAt(3));
+                            dateIn.setText(goal.getGoalDate().charAt(5)+""+goal.getGoalDate().charAt(6));
+                            monthIn.setText(goal.getGoalDate().charAt(8)+""+goal.getGoalDate().charAt(9));
                             amtNeedIn.getEditText().setText(String.format("%.2f", goal.getAmtNeed()));
                             amtHavingIn.getEditText().setText(String.format("%.2f", goal.getAmtHaving()));
 
@@ -141,7 +141,19 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                                     progressBar.setVisibility(View.VISIBLE);
 
                                     String goalName = goalNameIn.getEditText().getText().toString().trim();
-                                    String goalDate = monthIn.getText().toString().trim() + "/" + dateIn.getText().toString().trim() + "/" + yearIn.getText().toString().trim();
+
+//                                    String goalDate = monthIn.getText().toString().trim() + "/" + dateIn.getText().toString().trim() + "/" + yearIn.getText().toString().trim();
+
+                                    goalDate = "";
+
+                                    goalDate = goalDate + yearIn.getText().toString().trim() + "/";
+
+                                    if (dateIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+dateIn.getText().toString().trim() + "/";
+                                    else goalDate = goalDate + dateIn.getText().toString().trim() + "/";
+
+                                    if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim();
+                                    else goalDate = goalDate + monthIn.getText().toString().trim();
+
                                     String amtNeed = amtNeedIn.getEditText().getText().toString().trim();
                                     amtHaving = amtHavingIn.getEditText().getText().toString().trim();
 

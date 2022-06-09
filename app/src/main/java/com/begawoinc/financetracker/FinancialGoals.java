@@ -1,6 +1,6 @@
 package com.begawoinc.financetracker;
 
-public class FinancialGoals {
+public class FinancialGoals implements Comparable<FinancialGoals> {
 
     private int goalId;
     private String goal;
@@ -42,6 +42,13 @@ public class FinancialGoals {
 
     public void setAmtNeed(double amtNeed) {
         this.amtNeed = amtNeed;
+    }
+
+    @Override
+    public int compareTo(FinancialGoals o) {
+        if (getGoalDate() == null || o.getGoalDate() == null)
+            return 0;
+        else return getGoalDate().compareTo(o.getGoalDate());
     }
 
 }

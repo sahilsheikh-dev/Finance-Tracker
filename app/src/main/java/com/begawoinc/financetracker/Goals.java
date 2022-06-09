@@ -33,6 +33,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -122,11 +124,21 @@ public class Goals extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.VISIBLE);
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    if (!dataSnapshot.getKey().equals("financialGoalMaxCount")){
+                    if (!dataSnapshot.getKey().equals("financialGoalMaxCount")) {
                         FinancialGoals goal = dataSnapshot.getValue(FinancialGoals.class);
                         goalsList.add(goal);
                     }
                 }
+
+                Collections.sort(goalsList, new Comparator<FinancialGoals>() {
+                    @Override
+                    public int compare(FinancialGoals financialGoals1, FinancialGoals financialGoals2) {
+                        if (financialGoals1.getGoalDate() == null || financialGoals2.getGoalDate() == null) return 0;
+                        else return Long.compare(Long.parseLong(financialGoals1.getGoalDate().replace("/", "")), Long.parseLong(financialGoals2.getGoalDate().replace("/", "")));
+                    }
+                });
+
+                recyclerView.setAdapter(financialGoalsRecyclerAdapter);
                 financialGoalsRecyclerAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             }
@@ -137,9 +149,6 @@ public class Goals extends AppCompatActivity {
                 Toast.makeText(Goals.this, "ERROR::"+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-//        recycler view
-        recyclerView.setAdapter(financialGoalsRecyclerAdapter);
 
 //        to count total need of money
         myRef.addValueEventListener(new ValueEventListener() {
@@ -261,13 +270,13 @@ public class Goals extends AppCompatActivity {
 
                         goalDate = "";
 
-                        if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim() + "/";
-                        else goalDate = goalDate + monthIn.getText().toString().trim() + "/";
+                        goalDate = goalDate + yearIn.getText().toString().trim() + "/";
 
                         if (dateIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+dateIn.getText().toString().trim() + "/";
                         else goalDate = goalDate + dateIn.getText().toString().trim() + "/";
 
-                        goalDate = goalDate + yearIn.getText().toString().trim();
+                        if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim();
+                        else goalDate = goalDate + monthIn.getText().toString().trim();
 
                         String amtNeed = amtNeedIn.getEditText().getText().toString().trim();
                         amtHaving = amtHavingIn.getEditText().getText().toString().trim();
