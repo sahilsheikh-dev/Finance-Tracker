@@ -154,14 +154,17 @@ public class Goals extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 totalAmtNeededSt = totalAmtNeededSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
-                                if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 100000){
-                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", totalAmtNeededSt).toString().trim()+"/-");
-                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 100000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 10000000){
-                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/100000;
-                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
-                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 10000000){
-                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/10000000;
-                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+                                if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000) {
+                                    totalAmtNeeded.setText("₹" + String.format("%,.2f", totalAmtNeededSt).toString().trim() + "/-");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000) {
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000;
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" K");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000000;
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" M");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000000000;
+                                    totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" B");
                                 }
                             }
                         }
@@ -193,14 +196,17 @@ public class Goals extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 totalAmtHavingSt = totalAmtHavingSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
-                                if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 100000){
-                                    totalAmtHaving.setText("₹"+String.format("%,.2f", totalAmtHavingSt).toString().trim()+"/-");
-                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 100000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 10000000){
-                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/100000;
-                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
-                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 10000000){
-                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/10000000;
-                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+                                if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000) {
+                                    totalAmtHaving.setText("₹" + String.format("%,.2f", totalAmtHavingSt).toString().trim() + "/-");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000) {
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000;
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" K");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000000;
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" M");
+                                } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000000000){
+                                    double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000000000;
+                                    totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" B");
                                 }
                             }
                         }

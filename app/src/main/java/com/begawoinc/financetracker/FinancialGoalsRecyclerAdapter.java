@@ -59,24 +59,30 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
         holder.goalName.setText(String.valueOf(goalsList.get(position).getGoal()));
         holder.goalDate.setText(String.valueOf(goalsList.get(position).getGoalDate()));
 
-        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 100000){
-            holder.amtNeed.setText(String.format("%,.2f", goalsList.get(position).getAmtNeed()).toString().trim());
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 100000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 10000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/100000;
-            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 10000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/10000000;
-            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000) {
+            holder.amtNeed.setText(String.format("%,.2f", goalsList.get(position).getAmtNeed()).toString().trim() + "/-");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000) {
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000;
+            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" K");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000000;
+            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" M");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000000000;
+            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" B");
         }
 
-        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 100000){
-            holder.amtHaving.setText(String.format("%,.2f", goalsList.get(position).getAmtHaving()).toString().trim());
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 100000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 10000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/100000;
-            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" Lakhs");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 10000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/10000000;
-            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" Crore");
+        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000) {
+            holder.amtHaving.setText(String.format("%,.2f", goalsList.get(position).getAmtHaving()).toString().trim() + "/-");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000) {
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000;
+            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" K");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000000;
+            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" M");
+        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000000000;
+            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" B");
         }
 
 //        onclick update data

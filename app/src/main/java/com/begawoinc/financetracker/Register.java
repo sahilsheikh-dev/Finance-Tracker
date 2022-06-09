@@ -50,6 +50,7 @@ public class Register extends AppCompatActivity {
     LinearLayout otpSection;
     FirebaseAuth mAuth;
     String mVerificationId;
+    boolean isChecked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,13 +131,14 @@ public class Register extends AppCompatActivity {
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()) {
+                            if(dataSnapshot.exists() && !isChecked) {
                                 nameIn.setError(null);
                                 numberIn.setError(null);
                                 passwordIn.setError(null);
                                 emailIn.setError("Email is already available, please change");
                                 progressBar.setVisibility(View.GONE);
                             } else {
+                                isChecked = true;
                                 nameIn.setError(null);
                                 emailIn.setError(null);
                                 numberIn.setError(null);
@@ -265,12 +267,12 @@ public class Register extends AppCompatActivity {
         myRef.child("authUser").child("password").setValue(password);
 
 //        financialGoals
+        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
         myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
         myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
         myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
         myRef.child("financialGoals").child("1").child("goalId").setValue(1);
         myRef.child("financialGoals").child("1").child("goalDate").setValue(01+"-"+01+"-"+2017);
-        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
 
 //        net worth - assets
         myRef.child("networth").child("assets").child("cash").setValue("0");
