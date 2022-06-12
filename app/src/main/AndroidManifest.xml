@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinanceTracker">
         <activity
-            android:name=".Expenses"
+            android:name=".MonthlyTracker"
             android:exported="false" />
         <activity
             android:name=".Profile"

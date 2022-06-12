@@ -45,12 +45,12 @@ public class Register extends AppCompatActivity {
     Button loginBtn, registerBtn, verifyOtpBtn;
     TextInputLayout nameIn, emailIn, numberIn, passwordIn;
     EditText otpInput1, otpInput2, otpInput3, otpInput4, otpInput5, otpInput6;
-    TextView incorrectOtp;
+    TextView incorrectOtp, resendOtp;
     ProgressBar progressBar;
     LinearLayout otpSection;
     FirebaseAuth mAuth;
     String mVerificationId;
-    boolean isChecked = false;
+    boolean isChecked = false, otpSend = false, otpResendCheck = false;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,7 @@ public class Register extends AppCompatActivity {
         incorrectOtp = findViewById(R.id.incorrectOtp);
         verifyOtpBtn = findViewById(R.id.verifyOtpBtn);
         mAuth = FirebaseAuth.getInstance();
+//        resendOtp = findViewById(R.id.resendOtp);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +152,24 @@ public class Register extends AppCompatActivity {
                                 passwordIn.setEnabled(false);
 
 //                                to send otp verification code
-                                sendOtp(number.toString().trim());
+                                if (!otpSend) {
+                                    sendOtp(number.toString().trim());
+                                    otpSend = true;
+                                }
+
+//                                otpResendCheck = timeCount(60);
+//
+//                                if (otpResendCheck){
+//                                    resendOtp.setVisibility(View.VISIBLE);
+//                                    resendOtp.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//                                            sendOtp(number.toString().trim());
+//                                            otpSend = true;
+//                                            otpResendCheck = false;
+//                                        }
+//                                    });
+//                                }
 
                                 verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -169,9 +187,7 @@ public class Register extends AppCompatActivity {
                                             progressBar.setVisibility(View.VISIBLE);
                                             String otp = otpInput1In + "" + otpInput2In + "" + otpInput3In + "" +
                                                     otpInput4In + "" + otpInput5In + "" + otpInput6In;
-
                                             verifyOtpAndRegister(otp, name, username, email, number, password);
-
                                         } else {
                                             incorrectOtp.setVisibility(View.VISIBLE);
                                             progressBar.setVisibility(View.GONE);
@@ -267,12 +283,19 @@ public class Register extends AppCompatActivity {
         myRef.child("authUser").child("password").setValue(password);
 
 //        financialGoals
-        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
-        myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
-        myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
-        myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
-        myRef.child("financialGoals").child("1").child("goalId").setValue(1);
-        myRef.child("financialGoals").child("1").child("goalDate").setValue(2017+"-"+01+"-"+02);
+//        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
+//        myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
+//        myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
+//        myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
+//        myRef.child("financialGoals").child("1").child("goalId").setValue(1);
+//        myRef.child("financialGoals").child("1").child("goalDate").setValue(2017+"-"+02+"-"+01);
+
+//        monthlyTracker
+//        myRef.child("monthlyTracker").child("monthlyTrackerMaxCount").setValue(1);
+//        myRef.child("monthlyTracker").child("1").child("activity").setValue("income");
+//        myRef.child("monthlyTracker").child("1").child("amount").setValue(30000);
+//        myRef.child("monthlyTracker").child("1").child("date").setValue("2022/06/01");
+//        myRef.child("monthlyTracker").child("1").child("name").setValue("9 to 5 Salary");
 
 //        net worth - assets
         myRef.child("networth").child("assets").child("cash").setValue("0");
@@ -293,11 +316,6 @@ public class Register extends AppCompatActivity {
         myRef.child("planOfAction").child("monthlyExpenses").setValue("0");
         myRef.child("planOfAction").child("recNetIncome").setValue("0");
         myRef.child("planOfAction").child("saving").setValue("0");
-
-//        monthlyExpenses
-        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("expense").setValue("Food");
-        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("amtNeed").setValue("10000");
-        myRef.child("monthlyExpenses").child(01 + "-" + 2022).child("date").setValue(2022+"-"+01+"-"+01);
 
         progressBar.setVisibility(View.GONE);
         Toast.makeText(Register.this, "OTP Verified, Please Login to Continue", Toast.LENGTH_SHORT).show();
@@ -431,16 +449,15 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void sendOtp(String phoneNumber) {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber("+91" + phoneNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .setPhoneNumber("+91" + phoneNumber)
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(this)
+                        .setCallbacks(mCallbacks)
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
@@ -519,6 +536,28 @@ public class Register extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    public boolean timeCount(int count) {
+        boolean check = false;
+        long start = System.currentTimeMillis();
+        float sec = 0.0F;
+        while (true) {
+            try {
+                Thread.sleep(count*1000);
+                long end = System.currentTimeMillis();
+                sec = sec + (end - start) / 1000F;
+                System.out.println(sec + " seconds");
+                if(sec <= count) {
+                    check = true;
+                    break;
+                }
+            } catch (Exception e){
+                Toast.makeText(Register.this, "ERROR::"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return check;
     }
 
 }

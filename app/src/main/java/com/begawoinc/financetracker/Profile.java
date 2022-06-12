@@ -47,7 +47,7 @@ public class Profile extends AppCompatActivity {
                         return true;
 
                     case R.id.expenses:
-                        Intent intentExpenses = new Intent(Profile.this, Expenses.class);
+                        Intent intentExpenses = new Intent(Profile.this, MonthlyTracker.class);
                         intentExpenses.putExtra("USERNAME", USERNAME);
                         startActivity(intentExpenses);
                         overridePendingTransition(0,0);

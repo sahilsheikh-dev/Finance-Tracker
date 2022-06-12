@@ -7,13 +7,17 @@
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/data_border.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/data_head_background.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/empty_background.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_arrow_down.xml" value="0.3646153846153846" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_bookmarks_white.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_circle.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_delete.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_home.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_money.xml" value="0.3703125" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_pen.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/ic_user.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/lotout_background.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/otp_background.xml" value="0.3646153846153846" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/rounded_bar.xml" value="0.3646153846153846" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/rounded_black.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/rounded_red.xml" value="0.3703125" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/drawable/selector.xml" value="0.2109375" />
@@ -24,12 +28,15 @@
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_home.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_login.xml" value="0.34010416666666665" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_main.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_monthly_tracker.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_profile.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/activity_register.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/delete_dialog.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/goal_item.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/monthly_activity_item.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/root_item.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/save_financial_goal.xml" value="0.3541666666666667" />
+        <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/layout/save_monthly_activity.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/bottom_nav.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/LENOVO/OneDrive/Desktop/FinanceTracker/app/src/main/res/menu/menu.xml" value="0.3541666666666667" />

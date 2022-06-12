@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MonthlyTracker">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginEnd="10sp"
+                android:fontFamily="@font/bungee"
+                android:text="Monthly Tracker"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/data_border"
+                    android:orientation="vertical"
+                    android:paddingStart="0sp"
+                    android:paddingTop="10sp"
+                    android:paddingEnd="10sp"
+                    android:paddingBottom="10sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100sp"
+                            android:layout_height="wrap_content"
+                            android:text="Income"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/incomeAmt"
+                            android:layout_width="65sp"
+                            android:layout_height="wrap_content"
+                            android:text="00.00/-"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/incomePercentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00.00%"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <View
+                            android:id="@+id/incomeBar"
+                            android:layout_width="100dp"
+                            android:layout_height="15px"
+                            android:layout_marginStart="10sp"
+                            android:layout_marginEnd="10sp"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="#388E3C"
+                            android:background="@drawable/rounded_bar"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100sp"
+                            android:layout_height="wrap_content"
+                            android:text="Investments"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/investmentAmt"
+                            android:layout_width="65sp"
+                            android:layout_height="wrap_content"
+                            android:text="00.00K"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/investmentPercentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00.00%"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <View
+                            android:id="@+id/investmentBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="15px"
+                            android:layout_weight="0.7"
+                            android:layout_marginStart="10sp"
+                            android:layout_marginEnd="10sp"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="#1976D2"
+                            android:background="@drawable/rounded_bar"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100sp"
+                            android:layout_height="wrap_content"
+                            android:text="Expenses"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/expenseAmt"
+                            android:layout_width="65sp"
+                            android:layout_height="wrap_content"
+                            android:text="00.00M"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/expensePercentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00.00%"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <View
+                            android:id="@+id/expenseBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="15px"
+                            android:layout_weight="0.7"
+                            android:layout_marginStart="10sp"
+                            android:layout_marginEnd="10sp"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="#D32F2F"
+                            android:background="@drawable/rounded_bar"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100sp"
+                            android:layout_height="wrap_content"
+                            android:text="Remaining"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/remaningAmt"
+                            android:layout_width="65sp"
+                            android:layout_height="wrap_content"
+                            android:text="00.00B"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/remaningPercentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00.00%"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10sp"
+                            android:textSize="14dp" />
+
+                        <View
+                            android:id="@+id/remaningBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="15px"
+                            android:layout_weight="0.7"
+                            android:layout_marginStart="10sp"
+                            android:layout_marginEnd="10sp"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="#FBC02D"
+                            android:background="@drawable/rounded_bar"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginEnd="10sp"
+                android:background="@drawable/data_head_background"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tableHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:letterSpacing="0.2"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="Monthly Activities"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/addMonthlyActivity"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:src="@drawable/ic_add"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="2sp"
+                android:layout_marginEnd="10sp"
+                android:background="@color/bg_gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="Expenses"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/hideExpenses"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:src="@drawable/ic_arrow_down"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <ImageButton
+                    android:id="@+id/showExpenses"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_right"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/noExpenseDataAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Data Available"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/light_gray"
+                android:textSize="18sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/expensesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="10sp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="2sp"
+                android:layout_marginEnd="10sp"
+                android:background="@color/bg_gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="Incomes"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/hideIncomes"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_down"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <ImageButton
+                    android:id="@+id/showIncomes"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:src="@drawable/ic_arrow_right"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/noIncomeDataAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Data Available"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/light_gray"
+                android:textSize="18sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/incomesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="10sp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="2sp"
+                android:layout_marginEnd="10sp"
+                android:background="@color/bg_gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="Savings/Investments"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/hideInvestments"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_down"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <ImageButton
+                    android:id="@+id/showInvestments"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#fff"
+                    android:src="@drawable/ic_arrow_right"
+                    android:drawableTint="@color/white"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/noInvestmentDataAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Data Available"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/light_gray"
+                android:textSize="18sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/investmentsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="10sp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemBackground="@color/black"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@
     tools:context=".Goals">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="55dp"
@@ -28,10 +29,10 @@
                 android:layout_marginTop="20sp"
                 android:layout_marginEnd="10sp"
                 android:fontFamily="@font/bungee"
-                android:text="Track your financial goals"
+                android:text="Goals Tracker"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="38dp"
+                android:textSize="35dp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -40,8 +41,8 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_margin="10sp"
                     android:layout_weight="1"
                     android:background="@drawable/data_border"
@@ -76,8 +77,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_margin="10sp"
                     android:layout_weight="1"
                     android:background="@drawable/data_border"
@@ -116,13 +117,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
                 android:layout_marginStart="10sp"
+                android:layout_marginTop="20sp"
                 android:layout_marginEnd="10sp"
                 android:background="@drawable/data_head_background"
-                android:orientation="horizontal"
-                android:paddingEnd="5sp"
-                android:paddingRight="5sp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tableHeading"
@@ -144,17 +143,30 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/addGoals"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:backgroundTint="#fff"
-                    android:drawableRight="@drawable/ic_add"
+                    android:src="@drawable/ic_add"
                     android:drawableTint="@color/white"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/noDataAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Data Available"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/light_gray"
+                android:textSize="18sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/goalsRecyclerView"
@@ -162,8 +174,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
                 android:layout_marginEnd="10sp"
-                android:paddingEnd="5sp"
-                android:paddingRight="5sp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>

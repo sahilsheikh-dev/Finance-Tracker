@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()){
                         case R.id.expenses:
-                            Intent intentExpenses = new Intent(MainActivity.this, Expenses.class);
+                            Intent intentExpenses = new Intent(MainActivity.this, MonthlyTracker.class);
                             intentExpenses.putExtra("USERNAME", USERNAME);
                             startActivity(intentExpenses);
                             overridePendingTransition(0,0);

@@ -19,8 +19,8 @@
         app:layout_constraintLeft_toLeftOf="parent">
 
         <TextView
-            android:id="@+id/goalHeading"
-            android:layout_width="wrap_content"
+            android:id="@+id/monthlyActivityHeading"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bungee"
             android:gravity="center"
@@ -33,10 +33,10 @@
             android:background="@color/gray"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/goalName"
+            android:id="@+id/activityName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Goal"
+            android:hint="Activity Name"
             android:layout_marginTop="20sp"
             app:boxStrokeColor="@color/white"
             android:textColorHint="@color/gray"
@@ -59,10 +59,10 @@
             android:visibility="gone"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/amtNeed"
+            android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount Targeted"
+            android:hint="Amount"
             app:boxStrokeColor="@color/white"
             android:textColorHint="@color/gray"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -75,22 +75,34 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/amtHaving"
+        <RadioGroup
+            android:id="@+id/activityType"
+            android:checkedButton="@+id/radio_button_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Amount Having"
-            app:boxStrokeColor="@color/white"
-            android:textColorHint="@color/gray"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/expenses"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/white"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white"
+                android:checked="true"
+                android:text="Expense"/>
+            <RadioButton
+                android:id="@+id/income"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white"
+                android:text="Income"/>
+            <RadioButton
+                android:id="@+id/investment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white"
+                android:text="Investment"/>
+        </RadioGroup>
 
         <LinearLayout
             android:id="@+id/dateSection"
@@ -197,10 +209,10 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/saveGoalBtn"
+            android:id="@+id/saveMonthlyActivityBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save my goal"
+            android:text="Save Activity"
             android:textStyle="bold"
             android:backgroundTint="@color/white"
             android:textColor="@color/black"

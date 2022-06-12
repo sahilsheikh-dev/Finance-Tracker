@@ -6,13 +6,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +33,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
     List<FinancialGoals> goalsList;
     public static String USERNAME;
-    String amtHaving, goalDate;
+    String amtHaving, goalDate, dateSt = "";
     int id;
     long count;
 
@@ -57,7 +56,57 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
 //        String.format("%,.2f", Double.parseDouble(amtNeed)).toString().trim()
         holder.goalName.setText(String.valueOf(goalsList.get(position).getGoal()));
-        holder.goalDate.setText(String.valueOf(goalsList.get(position).getGoalDate()));
+
+        dateSt = "";
+        int monthSt = Integer.parseInt(goalsList.get(position).getGoalDate().charAt(5) + "" + goalsList.get(position).getGoalDate().charAt(6));
+        if (String.valueOf(monthSt).charAt(0) == 0) monthSt = String.valueOf(monthSt).charAt(1);
+
+        switch (monthSt){
+            case 1:
+                dateSt = dateSt + "January ";
+                break;
+            case 2:
+                dateSt = dateSt + "February ";
+                break;
+            case 3:
+                dateSt = dateSt + "March ";
+                break;
+            case 4:
+                dateSt = dateSt + "April ";
+                break;
+            case 5:
+                dateSt = dateSt + "May ";
+                break;
+            case 6:
+                dateSt = dateSt + "June ";
+                break;
+            case 7:
+                dateSt = dateSt + "July ";
+                break;
+            case 8:
+                dateSt = dateSt + "August ";
+                break;
+            case 9:
+                dateSt = dateSt + "September ";
+                break;
+            case 10:
+                dateSt = dateSt + "October ";
+                break;
+            case 11:
+                dateSt = dateSt + "November ";
+                break;
+            case 12:
+                dateSt = dateSt + "December ";
+                break;
+            default:
+                dateSt = dateSt + "ERROR ";
+                break;
+        }
+
+        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(8) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(9) + ", ";
+        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(0) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(1) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(2) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(3);
+
+        holder.goalDate.setText(dateSt);
 
         if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000) {
             holder.amtNeed.setText(String.format("%,.2f", goalsList.get(position).getAmtNeed()).toString().trim() + "/-");
@@ -127,10 +176,12 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                             TextInputLayout amtNeedIn = goalView.findViewById(R.id.amtNeed);
                             TextInputLayout amtHavingIn = goalView.findViewById(R.id.amtHaving);
 
+//                            YYYY-MM-DD
                             goalNameIn.getEditText().setText(goal.getGoal());
+
                             yearIn.setText(goal.getGoalDate().charAt(0)+""+goal.getGoalDate().charAt(1)+""+goal.getGoalDate().charAt(2)+""+goal.getGoalDate().charAt(3));
-                            dateIn.setText(goal.getGoalDate().charAt(5)+""+goal.getGoalDate().charAt(6));
-                            monthIn.setText(goal.getGoalDate().charAt(8)+""+goal.getGoalDate().charAt(9));
+                            monthIn.setText(goal.getGoalDate().charAt(5)+""+goal.getGoalDate().charAt(6));
+                            dateIn.setText(goal.getGoalDate().charAt(8)+""+goal.getGoalDate().charAt(9));
                             amtNeedIn.getEditText().setText(String.format("%.2f", goal.getAmtNeed()));
                             amtHavingIn.getEditText().setText(String.format("%.2f", goal.getAmtHaving()));
 
@@ -148,11 +199,11 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
                                     goalDate = goalDate + yearIn.getText().toString().trim() + "/";
 
-                                    if (dateIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+dateIn.getText().toString().trim() + "/";
-                                    else goalDate = goalDate + dateIn.getText().toString().trim() + "/";
+                                    if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim() + "/";
+                                    else goalDate = goalDate + monthIn.getText().toString().trim() + "/";
 
-                                    if (monthIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+monthIn.getText().toString().trim();
-                                    else goalDate = goalDate + monthIn.getText().toString().trim();
+                                    if (dateIn.getText().toString().trim().length() == 1) goalDate = goalDate + "0"+dateIn.getText().toString().trim();
+                                    else goalDate = goalDate + dateIn.getText().toString().trim();
 
                                     String amtNeed = amtNeedIn.getEditText().getText().toString().trim();
                                     amtHaving = amtHavingIn.getEditText().getText().toString().trim();
@@ -183,7 +234,13 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                                         amtHavingIn.setError(null);
                                         incorrectDate.setVisibility(View.VISIBLE);
                                         progressBar.setVisibility(View.GONE);
-                                    } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900)) {
+                                    } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900) || String.valueOf(yearIn.getText()).trim().length() < 4) {
+                                        goalNameIn.setError(null);
+                                        amtNeedIn.setError(null);
+                                        amtHavingIn.setError(null);
+                                        incorrectDate.setVisibility(View.VISIBLE);
+                                        progressBar.setVisibility(View.GONE);
+                                    } else if (Integer.parseInt(monthIn.getText().toString().trim()) < 1 || Integer.parseInt(monthIn.getText().toString().trim()) > 12){
                                         goalNameIn.setError(null);
                                         amtNeedIn.setError(null);
                                         amtHavingIn.setError(null);
@@ -313,7 +370,8 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
     }
 
     class FinancialGoalsViewHolder extends RecyclerView.ViewHolder {
-        TextView goalName, goalDate, amtHaving, amtNeed, goalUpdateBtn, goalDeleteBtn;
+        TextView goalName, goalDate, amtHaving, amtNeed;
+        ImageButton goalUpdateBtn, goalDeleteBtn;
 
         public FinancialGoalsViewHolder(@NonNull View itemView) {
             super(itemView);
