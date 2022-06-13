@@ -268,6 +268,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                                                 progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(view.getContext(), "Goal Saved", Toast.LENGTH_LONG).show();
                                                 Intent intent = new Intent(view.getContext(), Goals.class);
+                                                alertDialog.dismiss();
                                                 view.getContext().startActivity(intent);
                                                 ((Activity)view.getContext()).finish();
                                             }
@@ -342,6 +343,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(view.getContext(), "Data Deleted", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(view.getContext(), Goals.class);
+                                    alertDialog.dismiss();
                                     view.getContext().startActivity(intent);
                                     ((Activity)view.getContext()).finish();
                                 }

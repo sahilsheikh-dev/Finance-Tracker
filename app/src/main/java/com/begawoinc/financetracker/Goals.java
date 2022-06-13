@@ -352,6 +352,7 @@ public class Goals extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(Goals.this, "Goal Saved", Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(Goals.this, Goals.class);
+                                    alertDialog.dismiss();
                                     startActivity(intent);
                                     finish();
                                 }

@@ -76,16 +76,16 @@
 
                         <TextView
                             android:id="@+id/incomePercentage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="70sp"
                             android:layout_height="wrap_content"
-                            android:text="00.00%"
+                            android:text="100.00%"
                             android:textColor="@color/white"
                             android:layout_marginStart="10sp"
                             android:textSize="14dp" />
 
                         <View
                             android:id="@+id/incomeBar"
-                            android:layout_width="100dp"
+                            android:layout_width="match_parent"
                             android:layout_height="15px"
                             android:layout_marginStart="10sp"
                             android:layout_marginEnd="10sp"
@@ -119,7 +119,7 @@
 
                         <TextView
                             android:id="@+id/investmentPercentage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="70sp"
                             android:layout_height="wrap_content"
                             android:text="00.00%"
                             android:textColor="@color/white"
@@ -130,7 +130,6 @@
                             android:id="@+id/investmentBar"
                             android:layout_width="match_parent"
                             android:layout_height="15px"
-                            android:layout_weight="0.7"
                             android:layout_marginStart="10sp"
                             android:layout_marginEnd="10sp"
                             android:layout_marginTop="5dp"
@@ -163,7 +162,7 @@
 
                         <TextView
                             android:id="@+id/expensePercentage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="70sp"
                             android:layout_height="wrap_content"
                             android:text="00.00%"
                             android:textColor="@color/white"
@@ -174,7 +173,6 @@
                             android:id="@+id/expenseBar"
                             android:layout_width="match_parent"
                             android:layout_height="15px"
-                            android:layout_weight="0.7"
                             android:layout_marginStart="10sp"
                             android:layout_marginEnd="10sp"
                             android:layout_marginTop="5dp"
@@ -207,7 +205,7 @@
 
                         <TextView
                             android:id="@+id/remaningPercentage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="70sp"
                             android:layout_height="wrap_content"
                             android:text="00.00%"
                             android:textColor="@color/white"
@@ -218,7 +216,6 @@
                             android:id="@+id/remaningBar"
                             android:layout_width="match_parent"
                             android:layout_height="15px"
-                            android:layout_weight="0.7"
                             android:layout_marginStart="10sp"
                             android:layout_marginEnd="10sp"
                             android:layout_marginTop="5dp"

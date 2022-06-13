@@ -248,6 +248,7 @@ public class MonthlyTrackerRecyclerAdapter extends RecyclerView.Adapter<MonthlyT
                                                 progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(view.getContext(), "Activity Saved", Toast.LENGTH_LONG).show();
                                                 Intent intent = new Intent(view.getContext(), MonthlyTracker.class);
+                                                alertDialog.dismiss();
                                                 view.getContext().startActivity(intent);
                                                 ((Activity)view.getContext()).finish();
                                             }
@@ -318,6 +319,7 @@ public class MonthlyTrackerRecyclerAdapter extends RecyclerView.Adapter<MonthlyT
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(view.getContext(), "Data Deleted", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(view.getContext(), MonthlyTracker.class);
+                                    alertDialog.dismiss();
                                     view.getContext().startActivity(intent);
                                     ((Activity)view.getContext()).finish();
                                 }

@@ -2,6 +2,7 @@ package com.begawoinc.financetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
@@ -9,12 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,10 +53,12 @@ public class MonthlyTracker extends AppCompatActivity {
     List<MonthlyActivity> expensesMonthlyActivities, incomeMonthlyActivities, investmentsMonthlyActivities, monthlyActivities;
     FirebaseAuth mAuth;
     final Context context = this;
-    long count;
+    long count, incomeAmount, expenseAmount, investmentAmount, remaningAmount;
+    float incomePer, expensePer, investmentPer, remaningPer;
     String activityDate;
     TextView incomeAmt, incomePercentage, investmentAmt, investmentPercentage, expenseAmt, expensePercentage, remaningAmt, remaningPercentage, noExpenseDataAvailable, noIncomeDataAvailable, noInvestmentDataAvailable;
     ImageButton showExpenses, hideExpenses, showIncomes, hideIncomes, showInvestments, hideInvestments, addMonthlyActivity;
+    View incomrBar, expenseBar, investmentBar, remaningBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,10 @@ public class MonthlyTracker extends AppCompatActivity {
             showInvestments = findViewById(R.id.showInvestments);
             hideInvestments = findViewById(R.id.hideInvestments);
             addMonthlyActivity = findViewById(R.id.addMonthlyActivity);
+            incomrBar = findViewById(R.id.incomeBar);
+            expenseBar = findViewById(R.id.expenseBar);
+            investmentBar = findViewById(R.id.investmentBar);
+            remaningBar = findViewById(R.id.remaningBar);
 
             bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                 @Override
@@ -162,11 +173,65 @@ public class MonthlyTracker extends AppCompatActivity {
                             }
                         }
 
+                        Collections.sort(monthlyActivities, new Comparator<MonthlyActivity>() {
+                            @Override
+                            public int compare(MonthlyActivity m1, MonthlyActivity m2) {
+                                if (m1.getDate() == null || m2.getDate() == null) return 0;
+                                else return Long.compare(Long.parseLong(m1.getDate().replace("/", "")), Long.parseLong(m2.getDate().replace("/", "")));
+                            }
+                        });
+
+                        incomeAmount = 0;
+                        expenseAmount = 0;
+                        investmentAmount = 0;
+                        remaningAmount = 0;
+                        incomePer = 0.0f;
+                        expensePer = 0.0f;
+                        investmentPer = 0.0f;
+                        remaningPer = 0.0f;
+
                         for (MonthlyActivity activity: monthlyActivities){
                             if (activity.getActivity().equals("income")) incomeMonthlyActivities.add(activity);
                             else if (activity.getActivity().equals("expense")) expensesMonthlyActivities.add(activity);
                             else if (activity.getActivity().equals("investment")) investmentsMonthlyActivities.add(activity);
                         }
+
+                        for (MonthlyActivity income: incomeMonthlyActivities) incomeAmount += income.getAmount();
+                        for (MonthlyActivity expense: expensesMonthlyActivities) expenseAmount += expense.getAmount();
+                        for (MonthlyActivity investment: investmentsMonthlyActivities) investmentAmount += investment.getAmount();
+
+                        remaningAmount = incomeAmount - (expenseAmount + investmentAmount);
+
+                        incomePer = 100;
+                        expensePer = percentageCalculate(expenseAmount, incomeAmount);
+                        investmentPer = percentageCalculate(investmentAmount, incomeAmount);
+                        remaningPer = percentageCalculate(remaningAmount, incomeAmount);
+
+                        incomeAmt.setText(formatAmount(incomeAmount));
+                        expenseAmt.setText(formatAmount(expenseAmount));
+                        investmentAmt.setText(formatAmount(investmentAmount));
+                        remaningAmt.setText(formatAmount(remaningAmount));
+
+                        incomePercentage.setText(String.format("%.2f", incomePer).toString().trim() + "%");
+                        expensePercentage.setText(String.format("%.2f", expensePer).toString().trim() + "%");
+                        investmentPercentage.setText(String.format("%.2f", investmentPer).toString().trim() + "%");
+                        remaningPercentage.setText(String.format("%.2f", remaningPer).toString().trim() + "%");
+
+                        int expenseWidth = (int) (expensePer * (float) expenseBar.getWidth()) / 100;
+                        ViewGroup.LayoutParams expenseLayoutParams = expenseBar.getLayoutParams();
+                        expenseLayoutParams.width = expenseWidth;
+                        expenseBar.setLayoutParams(expenseLayoutParams);
+
+                        int investmentWidth = (int) (investmentPer * (float) investmentBar.getWidth()) / 100;
+                        ViewGroup.LayoutParams investmentLayoutParams = investmentBar.getLayoutParams();
+                        investmentLayoutParams.width = investmentWidth;
+                        investmentBar.setLayoutParams(investmentLayoutParams);
+
+                        int remaningWidth = (int) (remaningPer * (float) remaningBar.getWidth()) / 100;
+                        ViewGroup.LayoutParams remaningLayoutParams = remaningBar.getLayoutParams();
+                        remaningLayoutParams.width = remaningWidth;
+                        remaningBar.setLayoutParams(remaningLayoutParams);
+
 
                         if (incomeMonthlyActivities.size() == 0) noIncomeDataAvailable.setVisibility(View.VISIBLE);
                         else noIncomeDataAvailable.setVisibility(View.GONE);
@@ -174,28 +239,6 @@ public class MonthlyTracker extends AppCompatActivity {
                         else noExpenseDataAvailable.setVisibility(View.GONE);
                         if (investmentsMonthlyActivities.size() == 0) noInvestmentDataAvailable.setVisibility(View.VISIBLE);
                         else noInvestmentDataAvailable.setVisibility(View.GONE);
-
-//                        Collections.sort(expensesMonthlyActivities, new Comparator<MonthlyActivity>() {
-//                            @Override
-//                            public int compare(MonthlyActivity m1, MonthlyActivity m2) {
-//                                if (m1.getDate() == null || m2.getDate() == null) return 0;
-//                                else return Long.compare(Long.parseLong(m1.getDate().replace("/", "")), Long.parseLong(m2.getDate().replace("/", "")));
-//                            }
-//                        });
-//                        Collections.sort(incomeMonthlyActivities, new Comparator<MonthlyActivity>() {
-//                            @Override
-//                            public int compare(MonthlyActivity m1, MonthlyActivity m2) {
-//                                if (m1.getDate() == null || m2.getDate() == null) return 0;
-//                                else return Long.compare(Long.parseLong(m1.getDate().replace("/", "")), Long.parseLong(m2.getDate().replace("/", "")));
-//                            }
-//                        });
-//                        Collections.sort(investmentsMonthlyActivities, new Comparator<MonthlyActivity>() {
-//                            @Override
-//                            public int compare(MonthlyActivity m1, MonthlyActivity m2) {
-//                                if (m1.getDate() == null || m2.getDate() == null) return 0;
-//                                else return Long.compare(Long.parseLong(m1.getDate().replace("/", "")), Long.parseLong(m2.getDate().replace("/", "")));
-//                            }
-//                        });
 
                         expensesRecyclerView.setAdapter(expensesMTRecyclerAdapter);
                         expensesMTRecyclerAdapter.notifyDataSetChanged();
@@ -286,7 +329,7 @@ public class MonthlyTracker extends AppCompatActivity {
                     Button saveMonthlyActivityBtn = monthlyActivityView.findViewById(R.id.saveMonthlyActivityBtn);
                     Button closeBtn = monthlyActivityView.findViewById(R.id.closeBtn);
 
-                    monthlyActivityHeading.setText("Save your Cash Flow");
+                    monthlyActivityHeading.setText("Save your\nCash Flow");
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
@@ -333,7 +376,7 @@ public class MonthlyTracker extends AppCompatActivity {
                             } else if (isEmpty(amount)) {
                                 activityNameIn.setError(null);
                                 incorrectDate.setVisibility(View.GONE);
-                                amountIn.setError(null);
+                                amountIn.setError("Please Enter Amount");
                                 progressBar.setVisibility(View.GONE);
                             } else if (isEmpty(monthIn.getText().toString().trim()) || isEmpty(dateIn.getText().toString().trim()) || isEmpty(yearIn.getText().toString().trim())) {
                                 activityNameIn.setError(null);
@@ -377,6 +420,7 @@ public class MonthlyTracker extends AppCompatActivity {
                                         progressBar.setVisibility(View.GONE);
                                         Toast.makeText(MonthlyTracker.this, "Activity Saved", Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(MonthlyTracker.this, MonthlyTracker.class);
+                                        alertDialog.dismiss();
                                         startActivity(intent);
                                         finish();
                                     }
@@ -406,6 +450,28 @@ public class MonthlyTracker extends AppCompatActivity {
 
     public boolean isEmpty(String s){
         return s.isEmpty();
+    }
+
+    public String formatAmount(double amount){
+        String formatedAmount = "";
+        if (Double.parseDouble(String.valueOf(amount)) < 1000) {
+            formatedAmount = String.format("%,.2f", amount).toString().trim() + "/-";
+        } else if (Double.parseDouble(String.valueOf(amount)) < 1000000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" K";
+        } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000 && Double.parseDouble(String.valueOf(amount)) < 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" M";
+        } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000000){
+            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" B";
+        }
+        return formatedAmount;
+    }
+
+    public float percentageCalculate(float have, float total){
+        if (total <= 0) total = 1;
+        return (float) ((have/total)*100);
     }
 
 }
