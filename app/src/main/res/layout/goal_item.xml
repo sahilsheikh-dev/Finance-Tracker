@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_gray"
+    android:background="@drawable/rounded_gray"
     android:padding="10sp"
     android:layout_marginTop="1dp"
     android:layout_marginBottom="1dp"
@@ -27,7 +27,7 @@
         android:src="@drawable/ic_pen"
         android:drawableTint="#FBC02D"
         android:clickable="true"
-        android:backgroundTint="@color/bg_gray"
+        android:backgroundTint="@color/gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/goalName"
         app:layout_constraintRight_toLeftOf="@+id/goalDeleteBtn"/>
@@ -39,7 +39,7 @@
         android:src="@drawable/ic_delete"
         android:drawableTint="#D32F2F"
         android:clickable="true"
-        android:backgroundTint="@color/bg_gray"
+        android:backgroundTint="@color/gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/goalName"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -56,23 +56,12 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
-        android:id="@+id/rupeeHave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="₹"
-        android:textSize="16dp"
-        android:textColor="#388E3C"
-        android:textStyle="bold"
-        app:layout_constraintRight_toLeftOf="@id/amtHaving"
-        app:layout_constraintTop_toTopOf="@id/goalDate"/>
-
-    <TextView
         android:id="@+id/amtHaving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0/-"
         android:textSize="16dp"
-        android:textColor="#388E3C"
+        android:textColor="@color/green"
         android:textStyle="bold"
         app:layout_constraintRight_toLeftOf="@id/slash"
         app:layout_constraintTop_toTopOf="@id/goalDate"/>
@@ -82,18 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" / "
-        android:textSize="16dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/rupeeNeed"
-        app:layout_constraintBottom_toBottomOf="@id/rupeeNeed"
-        app:layout_constraintRight_toLeftOf="@id/rupeeNeed"/>
-
-    <TextView
-        android:id="@+id/rupeeNeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="₹"
         android:textSize="16dp"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -133,8 +110,5 @@
 <!--        app:layout_constraintTop_toBottomOf="@id/goalDate"-->
 <!--        app:layout_constraintRight_toRightOf="parent"-->
 <!--        app:layout_constraintLeft_toLeftOf="parent"/>-->
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

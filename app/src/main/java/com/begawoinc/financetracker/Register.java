@@ -50,7 +50,7 @@ public class Register extends AppCompatActivity {
     LinearLayout otpSection;
     FirebaseAuth mAuth;
     String mVerificationId;
-    boolean isChecked = false, otpSend = false, otpResendCheck = false;;
+    boolean isChecked = false, otpSend = false, otpResendCheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,21 +282,6 @@ public class Register extends AppCompatActivity {
         myRef.child("authUser").child("number").setValue(number);
         myRef.child("authUser").child("password").setValue(password);
 
-//        financialGoals
-//        myRef.child("financialGoals").child("financialGoalMaxCount").setValue(1);
-//        myRef.child("financialGoals").child("1").child("amtNeed").setValue(1);
-//        myRef.child("financialGoals").child("1").child("amtHaving").setValue(0);
-//        myRef.child("financialGoals").child("1").child("goal").setValue("My First Goal");
-//        myRef.child("financialGoals").child("1").child("goalId").setValue(1);
-//        myRef.child("financialGoals").child("1").child("goalDate").setValue(2017+"-"+02+"-"+01);
-
-//        monthlyTracker
-//        myRef.child("monthlyTracker").child("monthlyTrackerMaxCount").setValue(1);
-//        myRef.child("monthlyTracker").child("1").child("activity").setValue("income");
-//        myRef.child("monthlyTracker").child("1").child("amount").setValue(30000);
-//        myRef.child("monthlyTracker").child("1").child("date").setValue("2022/06/01");
-//        myRef.child("monthlyTracker").child("1").child("name").setValue("9 to 5 Salary");
-
 //        net worth - assets
         myRef.child("networth").child("assets").child("cash").setValue("0");
         myRef.child("networth").child("assets").child("digital").setValue("0");
@@ -323,7 +308,6 @@ public class Register extends AppCompatActivity {
         Intent intent = new Intent(Register.this, Login.class);
         startActivity(intent);
         finish();
-
     }
 
     public void numberOtpMove(){

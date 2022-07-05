@@ -2,15 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/icon_home"
+        android:iconTint="@color/white"
         android:id="@+id/home"/>
     <item android:title="Monthly Expenses"
-        android:icon="@drawable/ic_calendar"
+        android:icon="@drawable/icon_calendar_pen"
         android:id="@+id/expenses"/>
     <item android:title="Financial Goals"
-        android:icon="@drawable/ic_bookmarks_white"
+        android:icon="@drawable/icon_flag"
         android:id="@+id/goals"/>
     <item android:title="Profile"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/icon_user"
         android:id="@+id/profile"/>
 </menu>

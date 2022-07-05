@@ -48,17 +48,20 @@ public class MonthlyTracker extends AppCompatActivity {
     public static String USERNAME;
     BottomNavigationView bottomNavigationView;
     ProgressBar progressBar;
-    RecyclerView expensesRecyclerView, incomesRecyclerView, investmentsRecyclerView;
+    RecyclerView expensesRecyclerView, incomesRecyclerView, investmentsRecyclerView, parentRecyclerView;
     MonthlyTrackerRecyclerAdapter expensesMTRecyclerAdapter, incomeMTRecyclerAdapter, investmentMTRecyclerAdapter;
     List<MonthlyActivity> expensesMonthlyActivities, incomeMonthlyActivities, investmentsMonthlyActivities, monthlyActivities;
+    ArrayList<String> parentList;
+    ParentAdapter parentAdapter;
+
     FirebaseAuth mAuth;
     final Context context = this;
     long count, incomeAmount, expenseAmount, investmentAmount, remaningAmount;
     float incomePer, expensePer, investmentPer, remaningPer;
     String activityDate;
-    TextView incomeAmt, incomePercentage, investmentAmt, investmentPercentage, expenseAmt, expensePercentage, remaningAmt, remaningPercentage, noExpenseDataAvailable, noIncomeDataAvailable, noInvestmentDataAvailable;
+    TextView incomeAmt, incomePercentage, investmentAmt, investmentPercentage, expenseAmt, expensePercentage, remaningAmt, remaningPercentage, noExpenseDataAvailable, noIncomeDataAvailable, noInvestmentDataAvailable, warningOverBudget;
     ImageButton showExpenses, hideExpenses, showIncomes, hideIncomes, showInvestments, hideInvestments, addMonthlyActivity;
-    View incomrBar, expenseBar, investmentBar, remaningBar;
+    View incomrBar, expenseBar, investmentBar, remaningBar, overBudgetBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,9 @@ public class MonthlyTracker extends AppCompatActivity {
             expenseBar = findViewById(R.id.expenseBar);
             investmentBar = findViewById(R.id.investmentBar);
             remaningBar = findViewById(R.id.remaningBar);
+            overBudgetBar = findViewById(R.id.overBudgetBar);
+            warningOverBudget = findViewById(R.id.warningOverBudget);
+            parentRecyclerView = findViewById(R.id.parentRecyclerView);
 
             bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                 @Override
@@ -212,10 +218,10 @@ public class MonthlyTracker extends AppCompatActivity {
                         investmentAmt.setText(formatAmount(investmentAmount));
                         remaningAmt.setText(formatAmount(remaningAmount));
 
-                        incomePercentage.setText(String.format("%.2f", incomePer).toString().trim() + "%");
-                        expensePercentage.setText(String.format("%.2f", expensePer).toString().trim() + "%");
-                        investmentPercentage.setText(String.format("%.2f", investmentPer).toString().trim() + "%");
-                        remaningPercentage.setText(String.format("%.2f", remaningPer).toString().trim() + "%");
+                        incomePercentage.setText(removeZeroes(String.format("%.2f", incomePer).toString().trim()) + "%");
+                        expensePercentage.setText(removeZeroes(String.format("%.2f", expensePer).toString().trim()) + "%");
+                        investmentPercentage.setText(removeZeroes(String.format("%.2f", investmentPer).toString().trim()) + "%");
+                        remaningPercentage.setText(removeZeroes(String.format("%.2f", remaningPer).toString().trim()) + "%");
 
                         int expenseWidth = (int) (expensePer * (float) expenseBar.getWidth()) / 100;
                         ViewGroup.LayoutParams expenseLayoutParams = expenseBar.getLayoutParams();
@@ -232,6 +238,16 @@ public class MonthlyTracker extends AppCompatActivity {
                         remaningLayoutParams.width = remaningWidth;
                         remaningBar.setLayoutParams(remaningLayoutParams);
 
+                        if (remaningPer <= 0 && expensePer <= 0 && investmentPer <= 0) {
+                            overBudgetBar.setVisibility(View.GONE);
+                            warningOverBudget.setVisibility(View.GONE);
+                        } else if (remaningPer <= 0){
+                            overBudgetBar.setVisibility(View.VISIBLE);
+                            warningOverBudget.setVisibility(View.VISIBLE);
+                        } else {
+                            overBudgetBar.setVisibility(View.GONE);
+                            warningOverBudget.setVisibility(View.GONE);
+                        }
 
                         if (incomeMonthlyActivities.size() == 0) noIncomeDataAvailable.setVisibility(View.VISIBLE);
                         else noIncomeDataAvailable.setVisibility(View.GONE);
@@ -258,8 +274,6 @@ public class MonthlyTracker extends AppCompatActivity {
                 }
             });
 
-
-
 //            show and hide operations
             showExpenses.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -267,6 +281,14 @@ public class MonthlyTracker extends AppCompatActivity {
                     expensesRecyclerView.setVisibility(View.VISIBLE);
                     hideExpenses.setVisibility(View.VISIBLE);
                     showExpenses.setVisibility(View.GONE);
+
+                    incomesRecyclerView.setVisibility(View.GONE);
+                    showIncomes.setVisibility(View.VISIBLE);
+                    hideIncomes.setVisibility(View.GONE);
+
+                    investmentsRecyclerView.setVisibility(View.GONE);
+                    showInvestments.setVisibility(View.VISIBLE);
+                    hideInvestments.setVisibility(View.GONE);
                 }
             });
 
@@ -285,6 +307,14 @@ public class MonthlyTracker extends AppCompatActivity {
                     incomesRecyclerView.setVisibility(View.VISIBLE);
                     hideIncomes.setVisibility(View.VISIBLE);
                     showIncomes.setVisibility(View.GONE);
+
+                    expensesRecyclerView.setVisibility(View.GONE);
+                    showExpenses.setVisibility(View.VISIBLE);
+                    hideExpenses.setVisibility(View.GONE);
+
+                    investmentsRecyclerView.setVisibility(View.GONE);
+                    showInvestments.setVisibility(View.VISIBLE);
+                    hideInvestments.setVisibility(View.GONE);
                 }
             });
 
@@ -303,6 +333,14 @@ public class MonthlyTracker extends AppCompatActivity {
                     investmentsRecyclerView.setVisibility(View.VISIBLE);
                     hideInvestments.setVisibility(View.VISIBLE);
                     showInvestments.setVisibility(View.GONE);
+
+                    expensesRecyclerView.setVisibility(View.GONE);
+                    showExpenses.setVisibility(View.VISIBLE);
+                    hideExpenses.setVisibility(View.GONE);
+
+                    incomesRecyclerView.setVisibility(View.GONE);
+                    showIncomes.setVisibility(View.VISIBLE);
+                    hideIncomes.setVisibility(View.GONE);
                 }
             });
 
@@ -328,111 +366,218 @@ public class MonthlyTracker extends AppCompatActivity {
                     TextView monthlyActivityHeading = monthlyActivityView.findViewById(R.id.monthlyActivityHeading);
                     Button saveMonthlyActivityBtn = monthlyActivityView.findViewById(R.id.saveMonthlyActivityBtn);
                     Button closeBtn = monthlyActivityView.findViewById(R.id.closeBtn);
+                    TextInputLayout monthlyActivityType = monthlyActivityView.findViewById(R.id.monthlyActivityType);
+                    LinearLayout onceDateSection = monthlyActivityView.findViewById(R.id.onceDateSection);
+                    LinearLayout monthlyDateSection = monthlyActivityView.findViewById(R.id.monthlyDateSection);
 
-                    monthlyActivityHeading.setText("Save your\nCash Flow");
+                    monthlyActivityHeading.setText("Save your Cash Flow");
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
 
-                    saveMonthlyActivityBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    if (monthlyActivityType.getEditText().getText().toString().equals("Once")){
+                        monthlyDateSection.setVisibility(View.GONE);
+                        onceDateSection.setVisibility(View.VISIBLE);
+                        saveMonthlyActivityBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                            progressBar.setVisibility(View.VISIBLE);
-                            TextView incorrectDate = monthlyActivityView.findViewById(R.id.incorrectDate);
-                            TextInputLayout activityNameIn = monthlyActivityView.findViewById(R.id.activityName);
-                            EditText dateIn = monthlyActivityView.findViewById(R.id.date);
-                            EditText monthIn = monthlyActivityView.findViewById(R.id.month);
-                            EditText yearIn = monthlyActivityView.findViewById(R.id.year);
-                            TextInputLayout amountIn = monthlyActivityView.findViewById(R.id.amount);
-
-                            RadioGroup rg = monthlyActivityView.findViewById(R.id.activityType);
-                            int selectedId = rg.getCheckedRadioButtonId();
-                            RadioButton activityType = monthlyActivityView.findViewById(selectedId);
-                            String activity = activityType.getText().toString().trim().toLowerCase();
-
-                            String activityName = activityNameIn.getEditText().getText().toString().trim();
-                            activityDate = "";
-                            activityDate = activityDate + yearIn.getText().toString().trim() + "/";
-                            if (monthIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+monthIn.getText().toString().trim() + "/";
-                            else activityDate = activityDate + monthIn.getText().toString().trim() + "/";
-                            if (dateIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+dateIn.getText().toString().trim();
-                            else activityDate = activityDate + dateIn.getText().toString().trim();
-                            String amount = amountIn.getEditText().getText().toString().trim();
-
-                            Date currentDate = new Date();
-
-                            if (isEmpty(activityName) && isEmpty(amount) &&
-                                    isEmpty(monthIn.getText().toString().trim()) && isEmpty(dateIn.getText().toString().trim()) && isEmpty(yearIn.getText().toString().trim())) {
-                                activityNameIn.setError("Please Enter Activity Name");
-                                incorrectDate.setVisibility(View.VISIBLE);
-                                amountIn.setError("Please Enter Amount");
-                                progressBar.setVisibility(View.GONE);
-                            } else if (isEmpty(activityName)) {
-                                incorrectDate.setVisibility(View.GONE);
-                                amountIn.setError(null);
-                                activityNameIn.setError("Please Enter Activity Name");
-                                progressBar.setVisibility(View.GONE);
-                            } else if (isEmpty(amount)) {
-                                activityNameIn.setError(null);
-                                incorrectDate.setVisibility(View.GONE);
-                                amountIn.setError("Please Enter Amount");
-                                progressBar.setVisibility(View.GONE);
-                            } else if (isEmpty(monthIn.getText().toString().trim()) || isEmpty(dateIn.getText().toString().trim()) || isEmpty(yearIn.getText().toString().trim())) {
-                                activityNameIn.setError(null);
-                                amountIn.setError(null);
-                                amountIn.setError(null);
-                                incorrectDate.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900) || String.valueOf(yearIn.getText()).trim().length() < 4) {
-                                activityNameIn.setError(null);
-                                amountIn.setError(null);
-                                incorrectDate.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(monthIn.getText().toString().trim()) < 1 || Integer.parseInt(monthIn.getText().toString().trim()) > 12){
-                                activityNameIn.setError(null);
-                                amountIn.setError(null);
-                                incorrectDate.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-                            } else {
                                 progressBar.setVisibility(View.VISIBLE);
-                                activityNameIn.setError(null);
-                                incorrectDate.setVisibility(View.GONE);
-                                amountIn.setError(null);
+                                TextView incorrectDate = monthlyActivityView.findViewById(R.id.incorrectDate);
+                                TextInputLayout activityNameIn = monthlyActivityView.findViewById(R.id.activityName);
+                                EditText dateIn = monthlyActivityView.findViewById(R.id.date);
+                                EditText monthIn = monthlyActivityView.findViewById(R.id.month);
+                                EditText yearIn = monthlyActivityView.findViewById(R.id.year);
+                                TextInputLayout amountIn = monthlyActivityView.findViewById(R.id.amount);
 
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference(USERNAME).child("monthlyTracker");
+                                RadioGroup rg = monthlyActivityView.findViewById(R.id.activityType);
+                                int selectedId = rg.getCheckedRadioButtonId();
+                                RadioButton activityType = monthlyActivityView.findViewById(selectedId);
+                                String activity = activityType.getText().toString().trim().toLowerCase();
 
-                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                String activityName = activityNameIn.getEditText().getText().toString().trim();
+                                activityDate = "";
+                                activityDate = activityDate + yearIn.getText().toString().trim() + "/";
+                                if (monthIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+monthIn.getText().toString().trim() + "/";
+                                else activityDate = activityDate + monthIn.getText().toString().trim() + "/";
+                                if (dateIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+dateIn.getText().toString().trim();
+                                else activityDate = activityDate + dateIn.getText().toString().trim();
+                                String amount = amountIn.getEditText().getText().toString().trim();
 
-                                        if (dataSnapshot.child("monthlyTrackerMaxCount").exists()) count = (long) dataSnapshot.child("monthlyTrackerMaxCount").getValue()+1;
-                                        else count = 1;
+                                Date currentDate = new Date();
 
-                                        myRef.child("monthlyTrackerMaxCount").setValue(count);
-                                        myRef.child(String.valueOf(count)).child("activity").setValue(activity.toString().trim().toLowerCase());
-                                        myRef.child(String.valueOf(count)).child("activityID").setValue(Integer.parseInt(String.valueOf(count)));
-                                        myRef.child(String.valueOf(count)).child("amount").setValue(Double.parseDouble(amount));
-                                        myRef.child(String.valueOf(count)).child("name").setValue(activityName.toString().trim());
-                                        myRef.child(String.valueOf(count)).child("date").setValue(activityDate.toString().trim());
+                                if (isEmpty(activityName) && isEmpty(amount) &&
+                                        isEmpty(monthIn.getText().toString().trim()) && isEmpty(dateIn.getText().toString().trim()) && isEmpty(yearIn.getText().toString().trim())) {
+                                    activityNameIn.setError("Please Enter Activity Name");
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    amountIn.setError("Please Enter Amount");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(activityName)) {
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError(null);
+                                    activityNameIn.setError("Please Enter Activity Name");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(amount)) {
+                                    activityNameIn.setError(null);
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError("Please Enter Amount");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(monthIn.getText().toString().trim()) || isEmpty(dateIn.getText().toString().trim()) || isEmpty(yearIn.getText().toString().trim())) {
+                                    activityNameIn.setError(null);
+                                    amountIn.setError(null);
+                                    amountIn.setError(null);
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(yearIn.getText().toString().trim()) < (currentDate.getYear()+1900) || String.valueOf(yearIn.getText()).trim().length() < 4) {
+                                    activityNameIn.setError(null);
+                                    amountIn.setError(null);
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(monthIn.getText().toString().trim()) < 1 || Integer.parseInt(monthIn.getText().toString().trim()) > 12){
+                                    activityNameIn.setError(null);
+                                    amountIn.setError(null);
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    activityNameIn.setError(null);
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError(null);
 
-                                        progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(MonthlyTracker.this, "Activity Saved", Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(MonthlyTracker.this, MonthlyTracker.class);
-                                        alertDialog.dismiss();
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Toast.makeText(MonthlyTracker.this, "ERROR:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference(USERNAME).child("monthlyTracker");
+
+                                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            if (dataSnapshot.child("monthlyTrackerMaxCount").exists()) count = (long) dataSnapshot.child("monthlyTrackerMaxCount").getValue()+1;
+                                            else count = 1;
+
+                                            myRef.child("monthlyTrackerMaxCount").setValue(count);
+                                            myRef.child(String.valueOf(count)).child("activity").setValue(activity.toString().trim().toLowerCase());
+                                            myRef.child(String.valueOf(count)).child("activityID").setValue(Integer.parseInt(String.valueOf(count)));
+                                            myRef.child(String.valueOf(count)).child("amount").setValue(Double.parseDouble(amount));
+                                            myRef.child(String.valueOf(count)).child("name").setValue(activityName.toString().trim());
+                                            myRef.child(String.valueOf(count)).child("date").setValue(activityDate.toString().trim());
+                                            myRef.child(String.valueOf(count)).child("monthlyActivityType").setValue(monthlyActivityType.getEditText().getText().toString().trim());
+
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(MonthlyTracker.this, "Activity Saved", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(MonthlyTracker.this, MonthlyTracker.class);
+                                            alertDialog.dismiss();
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Toast.makeText(MonthlyTracker.this, "ERROR:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
                             }
+                        });
+                    } else {
+                        monthlyDateSection.setVisibility(View.VISIBLE);
+                        onceDateSection.setVisibility(View.GONE);
+                        saveMonthlyActivityBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                        }
-                    });
+                                progressBar.setVisibility(View.VISIBLE);
+                                TextView incorrectDate = monthlyActivityView.findViewById(R.id.incorrectDate);
+                                TextInputLayout activityNameIn = monthlyActivityView.findViewById(R.id.activityName);
+                                EditText dateIn = monthlyActivityView.findViewById(R.id.monthlyDate);
+                                EditText monthIn = monthlyActivityView.findViewById(R.id.monthlyMonth);
+//                                EditText yearIn = monthlyActivityView.findViewById(R.id.year);
+                                TextInputLayout amountIn = monthlyActivityView.findViewById(R.id.amount);
+
+                                RadioGroup rg = monthlyActivityView.findViewById(R.id.activityType);
+                                int selectedId = rg.getCheckedRadioButtonId();
+                                RadioButton activityType = monthlyActivityView.findViewById(selectedId);
+                                String activity = activityType.getText().toString().trim().toLowerCase();
+
+                                String activityName = activityNameIn.getEditText().getText().toString().trim();
+                                activityDate = "";
+//                                activityDate = activityDate + yearIn.getText().toString().trim() + "/";
+                                activityDate = activityDate + "0000" + "/";
+                                if (monthIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+monthIn.getText().toString().trim() + "/";
+                                else activityDate = activityDate + monthIn.getText().toString().trim() + "/";
+                                if (dateIn.getText().toString().trim().length() == 1) activityDate = activityDate + "0"+dateIn.getText().toString().trim();
+                                else activityDate = activityDate + dateIn.getText().toString().trim();
+                                String amount = amountIn.getEditText().getText().toString().trim();
+
+                                Date currentDate = new Date();
+
+                                if (isEmpty(activityName) && isEmpty(amount) &&
+                                        isEmpty(monthIn.getText().toString().trim()) && isEmpty(dateIn.getText().toString().trim())) {
+                                    activityNameIn.setError("Please Enter Activity Name");
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    amountIn.setError("Please Enter Amount");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(activityName)) {
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError(null);
+                                    activityNameIn.setError("Please Enter Activity Name");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(amount)) {
+                                    activityNameIn.setError(null);
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError("Please Enter Amount");
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (isEmpty(monthIn.getText().toString().trim()) || isEmpty(dateIn.getText().toString().trim())) {
+                                    activityNameIn.setError(null);
+                                    amountIn.setError(null);
+                                    amountIn.setError(null);
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(monthIn.getText().toString().trim()) < 1 || Integer.parseInt(monthIn.getText().toString().trim()) > 12){
+                                    activityNameIn.setError(null);
+                                    amountIn.setError(null);
+                                    incorrectDate.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    activityNameIn.setError(null);
+                                    incorrectDate.setVisibility(View.GONE);
+                                    amountIn.setError(null);
+
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference(USERNAME).child("monthlyTracker");
+
+                                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            if (dataSnapshot.child("monthlyTrackerMaxCount").exists()) count = (long) dataSnapshot.child("monthlyTrackerMaxCount").getValue()+1;
+                                            else count = 1;
+
+                                            myRef.child("monthlyTrackerMaxCount").setValue(count);
+                                            myRef.child(String.valueOf(count)).child("activity").setValue(activity.toString().trim().toLowerCase());
+                                            myRef.child(String.valueOf(count)).child("activityID").setValue(Integer.parseInt(String.valueOf(count)));
+                                            myRef.child(String.valueOf(count)).child("amount").setValue(Double.parseDouble(amount));
+                                            myRef.child(String.valueOf(count)).child("name").setValue(activityName.toString().trim());
+                                            myRef.child(String.valueOf(count)).child("date").setValue(activityDate.toString().trim());
+                                            myRef.child(String.valueOf(count)).child("monthlyActivityType").setValue(monthlyActivityType.getEditText().getText().toString().trim());
+
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(MonthlyTracker.this, "Activity Saved", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(MonthlyTracker.this, MonthlyTracker.class);
+                                            alertDialog.dismiss();
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Toast.makeText(MonthlyTracker.this, "ERROR:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
+                    }
 
                     closeBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -454,19 +599,81 @@ public class MonthlyTracker extends AppCompatActivity {
 
     public String formatAmount(double amount){
         String formatedAmount = "";
-        if (Double.parseDouble(String.valueOf(amount)) < 1000) {
-            formatedAmount = String.format("%,.2f", amount).toString().trim() + "/-";
-        } else if (Double.parseDouble(String.valueOf(amount)) < 1000000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
-            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
-            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" K";
-        } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000 && Double.parseDouble(String.valueOf(amount)) < 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
-            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" M";
-        } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
-            formatedAmount = String.format("%,.2f", tempAmount).toString().trim()+" B";
+
+        if (!isDollar()) formatedAmount = formatedAmount + "$";
+        else formatedAmount = formatedAmount + "₹";
+
+        if (!inLakhsCrore()){
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 100000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 100000 && Double.parseDouble(String.valueOf(amount)) < 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" L";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Cr";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -100000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -100000 && Double.parseDouble(String.valueOf(amount)) > -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" L";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Cr";
+            }
+        } else {
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 1000000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000 && Double.parseDouble(String.valueOf(amount)) < 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000 && Double.parseDouble(String.valueOf(amount)) > -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            }
         }
+
         return formatedAmount;
+    }
+
+    public boolean isDollar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("currencyDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("isDollar", "").isEmpty()
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase("");
+    }
+
+    public boolean inLakhsCrore() {
+        SharedPreferences sharedPreferences = getSharedPreferences("numberFormatDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("inLakhsCrore", "").isEmpty()
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase("");
+    }
+
+    public String removeZeroes(String number){
+        int dot = number.length()-3;
+        if (number.charAt(number.length()-1) == 0 || number.charAt(number.length()-1) == '0') return number.substring(0, dot);
+        else return number;
     }
 
     public float percentageCalculate(float have, float total){

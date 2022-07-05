@@ -7,6 +7,7 @@ public class MonthlyActivity implements Comparable<MonthlyActivity> {
     private double amount;
     private String name;
     private String date;
+    private String monthlyActivityType;
 
     public int getActivityID() {
         return activityID;
@@ -46,6 +47,14 @@ public class MonthlyActivity implements Comparable<MonthlyActivity> {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getMonthlyActivityType() {
+        return monthlyActivityType;
+    }
+
+    public void setMonthlyActivityType(String monthlyActivityType) {
+        this.monthlyActivityType = monthlyActivityType;
     }
 
     @Override

@@ -36,6 +36,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
     String amtHaving, goalDate, dateSt = "";
     int id;
     long count;
+    Context context;
 
     public FinancialGoalsRecyclerAdapter(List<FinancialGoals> goalsList) {
         this.goalsList = goalsList;
@@ -47,6 +48,7 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.goal_item, parent, false);
         FinancialGoalsViewHolder financialGoalsViewHolder = new FinancialGoalsViewHolder(view);
+        context = parent.getContext();
         return financialGoalsViewHolder;
     }
 
@@ -55,84 +57,60 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
     public void onBindViewHolder(@NonNull FinancialGoalsViewHolder holder, int position) {
 
 //        String.format("%,.2f", Double.parseDouble(amtNeed)).toString().trim()
+//        dateSt = "";
+//        int monthSt = Integer.parseInt(goalsList.get(position).getGoalDate().charAt(5) + "" + goalsList.get(position).getGoalDate().charAt(6));
+//        if (String.valueOf(monthSt).charAt(0) == 0) monthSt = String.valueOf(monthSt).charAt(1);
+//
+//        switch (monthSt){
+//            case 1:
+//                dateSt = dateSt + "January ";
+//                break;
+//            case 2:
+//                dateSt = dateSt + "February ";
+//                break;
+//            case 3:
+//                dateSt = dateSt + "March ";
+//                break;
+//            case 4:
+//                dateSt = dateSt + "April ";
+//                break;
+//            case 5:
+//                dateSt = dateSt + "May ";
+//                break;
+//            case 6:
+//                dateSt = dateSt + "June ";
+//                break;
+//            case 7:
+//                dateSt = dateSt + "July ";
+//                break;
+//            case 8:
+//                dateSt = dateSt + "August ";
+//                break;
+//            case 9:
+//                dateSt = dateSt + "September ";
+//                break;
+//            case 10:
+//                dateSt = dateSt + "October ";
+//                break;
+//            case 11:
+//                dateSt = dateSt + "November ";
+//                break;
+//            case 12:
+//                dateSt = dateSt + "December ";
+//                break;
+//            default:
+//                dateSt = dateSt + "ERROR ";
+//                break;
+//        }
+//
+//        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(8) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(9) + ", ";
+//        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(0) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(1) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(2) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(3);
+//        holder.goalDate.setText(dateSt);
+
+        holder.goalDate.setText(goalsList.get(position).getGoalDate());
         holder.goalName.setText(String.valueOf(goalsList.get(position).getGoal()));
-
-        dateSt = "";
-        int monthSt = Integer.parseInt(goalsList.get(position).getGoalDate().charAt(5) + "" + goalsList.get(position).getGoalDate().charAt(6));
-        if (String.valueOf(monthSt).charAt(0) == 0) monthSt = String.valueOf(monthSt).charAt(1);
-
-        switch (monthSt){
-            case 1:
-                dateSt = dateSt + "January ";
-                break;
-            case 2:
-                dateSt = dateSt + "February ";
-                break;
-            case 3:
-                dateSt = dateSt + "March ";
-                break;
-            case 4:
-                dateSt = dateSt + "April ";
-                break;
-            case 5:
-                dateSt = dateSt + "May ";
-                break;
-            case 6:
-                dateSt = dateSt + "June ";
-                break;
-            case 7:
-                dateSt = dateSt + "July ";
-                break;
-            case 8:
-                dateSt = dateSt + "August ";
-                break;
-            case 9:
-                dateSt = dateSt + "September ";
-                break;
-            case 10:
-                dateSt = dateSt + "October ";
-                break;
-            case 11:
-                dateSt = dateSt + "November ";
-                break;
-            case 12:
-                dateSt = dateSt + "December ";
-                break;
-            default:
-                dateSt = dateSt + "ERROR ";
-                break;
-        }
-
-        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(8) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(9) + ", ";
-        dateSt = dateSt + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(0) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(1) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(2) + String.valueOf(goalsList.get(position).getGoalDate()).trim().charAt(3);
-
-        holder.goalDate.setText(dateSt);
-
-        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000) {
-            holder.amtNeed.setText(String.format("%,.2f", goalsList.get(position).getAmtNeed()).toString().trim() + "/-");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000) {
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000;
-            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" K");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) < 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000000;
-            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" M");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed())) >= 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtNeed()))/1000000000;
-            holder.amtNeed.setText(String.format("%,.2f", tempAmount).toString().trim()+" B");
-        }
-
-        if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000) {
-            holder.amtHaving.setText(String.format("%,.2f", goalsList.get(position).getAmtHaving()).toString().trim() + "/-");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000) {
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000;
-            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" K");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000000 && Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) < 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000000;
-            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" M");
-        } else if (Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving())) >= 1000000000){
-            double tempAmount = Double.parseDouble(String.valueOf(goalsList.get(position).getAmtHaving()))/1000000000;
-            holder.amtHaving.setText(String.format("%,.2f", tempAmount).toString().trim()+" B");
-        }
+        holder.amtNeed.setText(formatAmount(goalsList.get(position).getAmtNeed(), context));
+        holder.amtHaving.setText(formatAmount(goalsList.get(position).getAmtHaving(), context));
 
 //        onclick update data
         holder.goalUpdateBtn.setOnClickListener(new View.OnClickListener() {
@@ -371,8 +349,9 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
         return goalsList.size();
     }
 
-    class FinancialGoalsViewHolder extends RecyclerView.ViewHolder {
-        TextView goalName, goalDate, amtHaving, amtNeed;
+    public class FinancialGoalsViewHolder extends RecyclerView.ViewHolder {
+
+        TextView goalName, goalDate, amtNeed, amtHaving;
         ImageButton goalUpdateBtn, goalDeleteBtn;
 
         public FinancialGoalsViewHolder(@NonNull View itemView) {
@@ -380,8 +359,8 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
             goalName = itemView.findViewById(R.id.goalName);
             goalDate = itemView.findViewById(R.id.goalDate);
-            amtHaving = itemView.findViewById(R.id.amtHaving);
             amtNeed = itemView.findViewById(R.id.amtNeed);
+            amtHaving = itemView.findViewById(R.id.amtHaving);
             goalUpdateBtn = itemView.findViewById(R.id.goalUpdateBtn);
             goalDeleteBtn = itemView.findViewById(R.id.goalDeleteBtn);
 
@@ -390,6 +369,89 @@ public class FinancialGoalsRecyclerAdapter extends RecyclerView.Adapter<Financia
 
     public boolean isEmpty(String s){
         return s.isEmpty();
+    }
+
+    public String formatAmount(double amount, Context context){
+        String formatedAmount = "";
+
+        if (!isDollar(context)) formatedAmount = formatedAmount + "$";
+        else formatedAmount = formatedAmount + "₹";
+
+        if (!inLakhsCrore(context)){
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 100000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+//                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+//                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim());
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 100000 && Double.parseDouble(String.valueOf(amount)) < 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Lakh";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Crore";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -100000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -100000 && Double.parseDouble(String.valueOf(amount)) > -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Lakh";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Crore";
+            }
+        } else {
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 1000000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+//                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+//                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim());
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000 && Double.parseDouble(String.valueOf(amount)) < 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000 && Double.parseDouble(String.valueOf(amount)) > -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            }
+        }
+
+        return formatedAmount;
+    }
+
+    public boolean isDollar(Context context) {
+        this.context = context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("currencyDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("isDollar", "").isEmpty()
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase("");
+    }
+
+    public boolean inLakhsCrore(Context context) {
+        this.context = context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("numberFormatDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("inLakhsCrore", "").isEmpty()
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase("");
+    }
+
+    public String removeZeroes(String number){
+        int dot = number.length()-3;
+        if (number.charAt(number.length()-1) == 0 || number.charAt(number.length()-1) == '0') return number.substring(0, dot);
+        else return number;
     }
 
 }

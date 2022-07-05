@@ -164,18 +164,7 @@ public class Goals extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     totalAmtNeededSt = totalAmtNeededSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
-                                    if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000) {
-                                        totalAmtNeeded.setText("₹" + String.format("%,.2f", totalAmtNeededSt).toString().trim() + "/-");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000) {
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000;
-                                        totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" K");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000000 && Double.parseDouble(String.valueOf(totalAmtNeededSt)) < 1000000000){
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000000;
-                                        totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" M");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtNeededSt)) >= 1000000000){
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtNeededSt))/1000000000;
-                                        totalAmtNeeded.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" B");
-                                    }
+                                    totalAmtNeeded.setText("₹" + formatAmount(totalAmtNeededSt));
                                 }
                             }
                             @Override
@@ -208,18 +197,7 @@ public class Goals extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     totalAmtHavingSt = totalAmtHavingSt + Double.parseDouble(String.valueOf(snapshot.getValue()));
-                                    if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000) {
-                                        totalAmtHaving.setText("₹" + String.format("%,.2f", totalAmtHavingSt).toString().trim() + "/-");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000) {
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000;
-                                        totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" K");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000000 && Double.parseDouble(String.valueOf(totalAmtHavingSt)) < 1000000000){
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000000;
-                                        totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" M");
-                                    } else if (Double.parseDouble(String.valueOf(totalAmtHavingSt)) >= 1000000000){
-                                        double tempAmount = Double.parseDouble(String.valueOf(totalAmtHavingSt))/1000000000;
-                                        totalAmtHaving.setText("₹"+String.format("%,.2f", tempAmount).toString().trim()+" B");
-                                    }
+                                    totalAmtHaving.setText("₹" + formatAmount(totalAmtHavingSt));
                                 }
                             }
                             @Override
@@ -379,6 +357,85 @@ public class Goals extends AppCompatActivity {
 
     public boolean isEmpty(String s){
         return s.isEmpty();
+    }
+
+    public String formatAmount(double amount){
+        String formatedAmount = "";
+
+        if (!isDollar()) formatedAmount = formatedAmount + "$";
+        else formatedAmount = formatedAmount + "₹";
+
+        if (!inLakhsCrore()){
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 100000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 100000 && Double.parseDouble(String.valueOf(amount)) < 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" L";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Cr";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -100000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -100000 && Double.parseDouble(String.valueOf(amount)) > -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/100000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" L";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -10000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/10000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" Cr";
+            }
+        } else {
+            if (Double.parseDouble(String.valueOf(amount)) < 1000 && Double.parseDouble(String.valueOf(amount)) >= 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) < 1000000 && Double.parseDouble(String.valueOf(amount)) >= 1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000 && Double.parseDouble(String.valueOf(amount)) < 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) >= 1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000 && Double.parseDouble(String.valueOf(amount)) < 0) {
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", amount).toString().trim()) + "/-";
+            } else if (Double.parseDouble(String.valueOf(amount)) > -1000000 && Double.parseDouble(String.valueOf(amount)) <= -1000) {
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" K";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000 && Double.parseDouble(String.valueOf(amount)) > -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" M";
+            } else if (Double.parseDouble(String.valueOf(amount)) <= -1000000000){
+                double tempAmount = Double.parseDouble(String.valueOf(amount))/1000000000;
+                formatedAmount = formatedAmount + removeZeroes(String.format("%,.2f", tempAmount).toString().trim())+" B";
+            }
+        }
+
+        return formatedAmount;
+    }
+
+    public boolean isDollar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("currencyDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("isDollar", "").isEmpty()
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("isDollar", "").equalsIgnoreCase("");
+    }
+
+    public boolean inLakhsCrore() {
+        SharedPreferences sharedPreferences = getSharedPreferences("numberFormatDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("inLakhsCrore", "").isEmpty()
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase(null)
+                || sharedPreferences.getString("inLakhsCrore", "").equalsIgnoreCase("");
+    }
+
+    public String removeZeroes(String number){
+        int dot = number.length()-3;
+        if (number.charAt(number.length()-1) == 0 || number.charAt(number.length()-1) == '0') return number.substring(0, dot);
+        else return number;
     }
 
 }
